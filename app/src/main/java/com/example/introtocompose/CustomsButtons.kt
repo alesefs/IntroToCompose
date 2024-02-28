@@ -38,6 +38,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -73,6 +75,9 @@ fun CustomButtonConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()//var
             .height(48.dp)//var
+            .semantics {
+                contentDescription = text
+            }
             .testTag("TAG_BUTTON_TEST"),
         shape = RoundedCornerShape(0.dp),//var
         enabled = enable,//var
@@ -237,6 +242,9 @@ fun CustomButtonDoubleClick(
             modifier = Modifier
                 .fillMaxWidth()//var
                 .height(48.dp)//var
+                .semantics {
+                    contentDescription = text
+                }
                 .testTag("TAG_BUTTON_TEST"),
             shape = RoundedCornerShape(24.dp),//var
             colors = ButtonDefaults.buttonColors(
@@ -319,7 +327,10 @@ fun CustomButton(
         Button(
             modifier = modifier
                 .fillMaxWidth()
-                .height(48.dp),
+                .height(48.dp)
+                .semantics {
+                    contentDescription = text
+                },
             shape = if (isRect) {
                 RoundedCornerShape(0.dp)
             } else {
