@@ -38,6 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
@@ -57,7 +58,8 @@ import com.example.introtocompose.ui.theme.IntroToComposeTheme
 @Composable
 fun CustomButtonConstraintLayoutPreview() {
     CustomButtonConstraintLayout(
-        text = "Custom button",
+        text = "Asiatech",
+        iconDescription = null,
         icon = Icons.Rounded.Notifications,
         enable = false
     )
@@ -67,16 +69,19 @@ fun CustomButtonConstraintLayoutPreview() {
 fun CustomButtonConstraintLayout(
     text: String,
     icon: ImageVector,
+    iconDescription: String? = null,
     enable: Boolean = true
 ) {
     val context = LocalContext.current
+
+    val textIconDescription = if (iconDescription.isNullOrEmpty().not()) iconDescription else ""
 
     Button(
         modifier = Modifier
             .fillMaxWidth()//var
             .height(48.dp)//var
-            .semantics {
-                contentDescription = text
+            .semantics(mergeDescendants = true) {
+                contentDescription = "botão, $text $textIconDescription"
             }
             .testTag("TAG_BUTTON_TEST"),
         shape = RoundedCornerShape(0.dp),//var
@@ -167,7 +172,9 @@ fun CustomButtonConstraintLayout(
         */
 
         ConstraintLayout(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .clearAndSetSemantics { }
         ) {
             val (textRef, iconRef) = createRefs()
             val guidelineFromEnd = createGuidelineFromEnd(24.dp)
@@ -175,6 +182,9 @@ fun CustomButtonConstraintLayout(
             Text(
                 text = text,
                 modifier = Modifier
+                    .semantics {
+                        contentDescription = ""
+                    }
                     .constrainAs(textRef) {
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
@@ -211,7 +221,7 @@ fun CustomButtonConstraintLayout(
                     .size(16.dp)
                     .testTag("TAG_ICON_TEST"),
                 imageVector = icon,
-                contentDescription = "Notifications"
+                contentDescription = null
             )
         }
 
@@ -237,7 +247,7 @@ fun CustomButtonDoubleClick(
     val context = LocalContext.current
     val rippleColor = if (enable) Color(0xffc8d7eb) else Color(0xffeff0f1)
 
-    CompositionLocalProvider (LocalRippleTheme provides RippleEffect(rippleColor)) {
+    CompositionLocalProvider(LocalRippleTheme provides RippleEffect(rippleColor)) {
         Button(
             modifier = Modifier
                 .fillMaxWidth()//var
@@ -261,7 +271,9 @@ fun CustomButtonDoubleClick(
             }
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
