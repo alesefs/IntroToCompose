@@ -447,7 +447,7 @@ fun IconButton(
                 color = Color.Red,
             ),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White,
+                containerColor = style.backgroundColor,
                 contentColor = style.enableColor,
                 disabledContentColor = style.disableColor
             ),
