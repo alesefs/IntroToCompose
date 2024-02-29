@@ -252,7 +252,7 @@ fun CustomButtonDoubleClick(
             modifier = Modifier
                 .fillMaxWidth()//var
                 .height(48.dp)//var
-                .semantics {
+                .semantics (mergeDescendants = true) {
                     contentDescription = text
                 }
                 .testTag("TAG_BUTTON_TEST"),
@@ -287,7 +287,7 @@ fun CustomButtonDoubleClick(
                 )
                 Image(
                     painterResource(id = image),
-                    contentDescription = "eletric car",
+                    contentDescription = null,
                     modifier = Modifier
                         .fillMaxHeight(0.5f)
                         .padding(start = 8.dp)

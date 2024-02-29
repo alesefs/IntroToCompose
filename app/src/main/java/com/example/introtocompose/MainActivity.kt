@@ -106,6 +106,14 @@ fun MyApp() {
                 icon = Icons.Rounded.Notifications,
                 enable = true
             )
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+            CustomButtonDoubleClick(
+                text = "Custom",
+                image = R.drawable.baseline_electric_car_24,
+                enable = true
+            )
         }
     }
 }
