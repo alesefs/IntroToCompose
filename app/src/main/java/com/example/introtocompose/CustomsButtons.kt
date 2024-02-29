@@ -2,9 +2,11 @@ package com.example.introtocompose
 
 import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,9 +32,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -252,7 +257,7 @@ fun CustomButtonDoubleClick(
             modifier = Modifier
                 .fillMaxWidth()//var
                 .height(48.dp)//var
-                .semantics (mergeDescendants = true) {
+                .semantics(mergeDescendants = true) {
                     contentDescription = text
                 }
                 .testTag("TAG_BUTTON_TEST"),
@@ -390,4 +395,103 @@ fun CustomButton(
 
         }
     }
+}
+
+sealed class ButtonStyle(
+    val backgroundColor: Color,
+    val enableColor: Color,
+    val disableColor: Color,
+    val rippleColor: Color
+) {
+
+    fun contentColor(enable: Boolean) = if (enable) enableColor else disableColor
+
+    data object Light : ButtonStyle(
+        backgroundColor = Color.White,
+        enableColor = Color.Blue,
+        disableColor = Color.LightGray,
+        rippleColor = Color.LightGray.copy(alpha = 0.25f)
+    )
+
+    data object Dark : ButtonStyle(
+        backgroundColor = Color.Black,
+        enableColor = Color.White,
+        disableColor = Color.DarkGray,
+        rippleColor = Color.DarkGray.copy(alpha = 0.25f)
+    )
+
+}
+
+@Composable
+fun IconButton(
+    icon: ImageVector,
+    buttonDescription: String,
+    style: ButtonStyle,
+    modifier: Modifier = Modifier,
+    enable: Boolean = true,
+    onClick: (() -> Unit)?
+) {
+    CompositionLocalProvider(LocalRippleTheme provides RippleEffect(style.rippleColor)) {
+        Button(
+            modifier = modifier
+                .size(48.dp)
+                .clearAndSetSemantics {
+                    contentDescription = buttonDescription
+                },
+            shape = RoundedCornerShape(8.dp),
+            elevation = ButtonDefaults.buttonElevation(
+                defaultElevation = 0.dp
+            ),
+            border = BorderStroke(
+                width = 2.dp,
+                color = Color.Red,
+            ),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.White,
+                contentColor = style.enableColor,
+                disabledContentColor = style.disableColor
+            ),
+            enabled = enable,
+            contentPadding = PaddingValues(8.dp),
+            onClick = {
+                onClick?.invoke()
+            }
+        ) {
+            Icon(
+                modifier = modifier.size(16.dp),
+                imageVector = icon,
+                contentDescription = "$icon"
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun IconButtonPreview() {
+    val context = LocalContext.current
+
+    Column {
+        IconButton(
+            style = ButtonStyle.Dark,
+            icon = Icons.Rounded.Notifications,
+            buttonDescription = "Notifications",
+            enable = true
+        ) {
+            Toast.makeText(context, "Notification", Toast.LENGTH_SHORT).show()
+        }
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        IconButton(
+            style = ButtonStyle.Light,
+            icon = Icons.Rounded.Notifications,
+            buttonDescription = "Notifications",
+            enable = true
+        ) {
+            Toast.makeText(context, "Notification", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
 }
