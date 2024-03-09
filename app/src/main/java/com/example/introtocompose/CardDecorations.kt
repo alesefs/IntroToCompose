@@ -141,7 +141,7 @@ fun CardDecorationPreview() {
             style = CardDecorationsStyle.Decorated(
                 bgColor = Color.Yellow,
                 cornerShape = 12.dp,
-                decorationSize = 8.dp,,
+                decorationSize = 8.dp,
                 decorationColor = Color.Red
             ),
             /*style = CardDecorationsStyle.Shadowed(
