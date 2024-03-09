@@ -79,7 +79,7 @@ fun CardDecoration(
             Box(
                 modifier = Modifier
                     .width(12.dp)
-                    .height(100.dp)
+                    .fillMaxHeight()
                     .clip(
                         RoundedCornerShape(
                             topStart = CornerSize(style.cornerShape),
