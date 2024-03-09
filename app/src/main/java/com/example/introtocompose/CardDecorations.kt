@@ -56,6 +56,7 @@ sealed class CardDecorationsStyle {
     class Decorated(
         val bgColor: Color = Color.White,
         val cornerShape: Dp = 0.dp,
+        val decorationSize: Dp = 12.dp,
         val decorationColor: Color = Color.Yellow
     ) : CardDecorationsStyle()
 }
@@ -78,7 +79,7 @@ fun CardDecoration(
         if (style is CardDecorationsStyle.Decorated) {
             Box(
                 modifier = Modifier
-                    .width(12.dp)
+                    .width(style.decorationSize)
                     .fillMaxHeight()
                     .clip(
                         RoundedCornerShape(
@@ -140,6 +141,7 @@ fun CardDecorationPreview() {
             style = CardDecorationsStyle.Decorated(
                 bgColor = Color.Yellow,
                 cornerShape = 12.dp,
+                decorationSize = 8.dp,,
                 decorationColor = Color.Red
             ),
             /*style = CardDecorationsStyle.Shadowed(
