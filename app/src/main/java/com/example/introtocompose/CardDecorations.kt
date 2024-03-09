@@ -137,22 +137,22 @@ fun CardDecoration(
 fun CardDecorationPreview() {
     IntroToComposeTheme {
         CardDecoration(
-            /*style = CardDecorationsStyle.Decorated(
+            style = CardDecorationsStyle.Decorated(
                 bgColor = Color.Yellow,
                 cornerShape = 12.dp,
                 decorationColor = Color.Red
-            ),*/
+            ),
             /*style = CardDecorationsStyle.Shadowed(
                 bgColor = Color.Yellow,
                 cornerShape = 12.dp,
                 elevation = 2.dp
             ),*/
-            style = CardDecorationsStyle.Border(
+            /*style = CardDecorationsStyle.Border(
                 bgColor = Color.Yellow,
                 cornerShape = 12.dp,
                 borderColor = Color.Red,
                 borderSize = 2.dp
-            ),
+            ),*/
             modifier = Modifier.size(150.dp, 100.dp),
         ) {
             Column(
