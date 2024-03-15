@@ -123,10 +123,10 @@ enum class ElevationValues(val value: Dp) {
 
 sealed class CustomCardStyles {
     class Active(
-        val bgColor: Color,
-        shapeStyle: Pair<BorderRadiusStyle, BorderRadiusValues>
+        bgColor: Color = Color.White,
+        shapeStyle: Pair<BorderRadiusStyle, BorderRadiusValues> = Pair(BorderRadiusStyle.All, BorderRadiusValues.Default),
     ) : CustomCardStyles() {
-//        val color = CardCustomDefaults.backgroundColor(CardCustomTypes.Active)
+        val color = CardCustomDefaults.backgroundColor(type = CardCustomTypes.Active, backgroundColor = bgColor)
 
         val shape = CardCustomDefaults.roundCornerShape(
             shapeStyle.first,
@@ -135,10 +135,10 @@ sealed class CustomCardStyles {
     }
 
     class Deactivate(
-        val bgColor: Color,
-        shapeStyle: Pair<BorderRadiusStyle, BorderRadiusValues>,
+        deactivateColor: Color = Color.LightGray,
+        shapeStyle: Pair<BorderRadiusStyle, BorderRadiusValues> = Pair(BorderRadiusStyle.All, BorderRadiusValues.Default),
     ) : CustomCardStyles() {
-//        val color = CardCustomDefaults.backgroundColor(CardCustomTypes.Deactivate)
+        val color = CardCustomDefaults.backgroundColor(type = CardCustomTypes.Deactivate, deactivateColor = deactivateColor)
 
         val shape = CardCustomDefaults.roundCornerShape(
             shapeStyle.first,
@@ -147,11 +147,11 @@ sealed class CustomCardStyles {
     }
 
     class Border (
-        val bgColor: Color,
-        shapeStyle: Pair<BorderRadiusStyle, BorderRadiusValues>,
-        borderStyle: Pair<BorderValues, Color>
+        bgColor: Color = Color.White,
+        shapeStyle: Pair<BorderRadiusStyle, BorderRadiusValues> = Pair(BorderRadiusStyle.All, BorderRadiusValues.Default),
+        borderStyle: Pair<BorderValues, Color> = Pair(BorderValues.Medium, Color.Black)
     ) : CustomCardStyles() {
-//        val color = CardCustomDefaults.backgroundColor(CardCustomTypes.Border)
+        val color = CardCustomDefaults.backgroundColor(type = CardCustomTypes.Border, backgroundColor = bgColor)
 
         val shape = CardCustomDefaults.roundCornerShape(
             shapeStyle.first,
@@ -165,11 +165,11 @@ sealed class CustomCardStyles {
     }
 
     class Elevation (
-        val bgColor: Color,
-        shapeStyle: Pair<BorderRadiusStyle, BorderRadiusValues>,
-        elevationValue: ElevationValues
+        bgColor: Color = Color.White,
+        shapeStyle: Pair<BorderRadiusStyle, BorderRadiusValues> = Pair(BorderRadiusStyle.All, BorderRadiusValues.Default),
+        elevationValue: ElevationValues = ElevationValues.Medium
     ) : CustomCardStyles() {
-//        val color = CardCustomDefaults.backgroundColor(CardCustomTypes.Elevation)
+        val color = CardCustomDefaults.backgroundColor(type = CardCustomTypes.Elevation, backgroundColor = bgColor)
 
         val shape = CardCustomDefaults.roundCornerShape(
             shapeStyle.first,
@@ -194,10 +194,10 @@ fun CardCustomSta(
         modifier = Modifier,
         colors = CardDefaults.cardColors(
             containerColor = when(customCardStyles) {
-                is CustomCardStyles.Active -> customCardStyles.bgColor
-                is CustomCardStyles.Border -> customCardStyles.bgColor
-                is CustomCardStyles.Deactivate -> customCardStyles.bgColor
-                is CustomCardStyles.Elevation -> customCardStyles.bgColor
+                is CustomCardStyles.Active -> customCardStyles.color
+                is CustomCardStyles.Border -> customCardStyles.color
+                is CustomCardStyles.Deactivate -> customCardStyles.color
+                is CustomCardStyles.Elevation -> customCardStyles.color
             }
             //CardCustomDefaults.backgroundColor(type, Color.Green)
         ),
@@ -238,9 +238,7 @@ fun CustomCardPreview() {
         CardCustomSta(
 //            type = CardCustomTypes.Border,
             customCardStyles = CustomCardStyles.Border(
-                Color.Green,
-                Pair(BorderRadiusStyle.TopEnd, BorderRadiusValues.Default),
-                Pair(BorderValues.Medium, Color.Magenta)
+                shapeStyle = Pair(BorderRadiusStyle.Top, BorderRadiusValues.Default)
             ),
 //            shapeStyle = Pair(BorderRadiusStyle.TopEnd, BorderRadiusValues.Default),
 //            borderSize = BorderValues.Medium,
