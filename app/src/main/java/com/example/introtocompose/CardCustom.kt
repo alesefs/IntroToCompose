@@ -49,6 +49,12 @@ object CardCustomDefaults {
             BorderRadiusStyle.Bottom -> RoundedCornerShape(bottomStart = borderRadiusValue, bottomEnd = borderRadiusValue)
             BorderRadiusStyle.Start -> RoundedCornerShape(bottomStart = borderRadiusValue, topStart = borderRadiusValue)
             BorderRadiusStyle.End -> RoundedCornerShape(bottomEnd = borderRadiusValue, topEnd = borderRadiusValue)
+            BorderRadiusStyle.TopStartBottomEnd -> RoundedCornerShape(topStart = borderRadiusValue, bottomEnd = borderRadiusValue)
+            BorderRadiusStyle.TopEndBottomStart -> RoundedCornerShape(topEnd = borderRadiusValue, bottomStart = borderRadiusValue)
+            BorderRadiusStyle.SharpTopStart -> RoundedCornerShape(topStart = 0.dp, topEnd = borderRadiusValue, bottomStart = borderRadiusValue, bottomEnd = borderRadiusValue)
+            BorderRadiusStyle.SharpTopEnd -> RoundedCornerShape(topStart = borderRadiusValue, topEnd = 0.dp, bottomStart = borderRadiusValue, bottomEnd = borderRadiusValue)
+            BorderRadiusStyle.SharpBottomStart -> RoundedCornerShape(topStart = borderRadiusValue, topEnd = borderRadiusValue, bottomStart = 0.dp, bottomEnd = borderRadiusValue)
+            BorderRadiusStyle.SharpBottomEnd -> RoundedCornerShape(topStart = borderRadiusValue, topEnd = borderRadiusValue, bottomStart = borderRadiusValue, bottomEnd = 0.dp)
         }
     }
 
@@ -93,7 +99,13 @@ enum class BorderRadiusStyle {
     Top,
     Bottom,
     Start,
-    End
+    End,
+    TopStartBottomEnd,
+    TopEndBottomStart,
+    SharpTopStart,
+    SharpTopEnd,
+    SharpBottomStart,
+    SharpBottomEnd
 }
 
 enum class BorderRadiusValues(val value: Dp) {
@@ -238,7 +250,9 @@ fun CustomCardPreview() {
         CardCustomSta(
 //            type = CardCustomTypes.Border,
             customCardStyles = CustomCardStyles.Border(
-                shapeStyle = Pair(BorderRadiusStyle.Top, BorderRadiusValues.Default)
+                bgColor = Color.Black,
+                shapeStyle = Pair(BorderRadiusStyle.SharpBottomEnd, BorderRadiusValues.Default),
+                borderStyle = Pair(BorderValues.XLarge, Color.Magenta)
             ),
 //            shapeStyle = Pair(BorderRadiusStyle.TopEnd, BorderRadiusValues.Default),
 //            borderSize = BorderValues.Medium,
