@@ -12,6 +12,10 @@ constraintlayout = "2.1.4"
 constraintlayoutCompose = "1.0.1"
 composeVectorize = "0.6.0"
 org-jetbrains-kotlin-jvm = "1.9.22"
+cardview = "1.0.0"
+appcompat = "1.6.1"
+material = "1.10.0"
+activity = "1.8.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -31,6 +35,10 @@ material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 compose-vectorize = { group = "dev.sergiobelda.compose.vectorize", name = "compose-vectorize-core", version.ref = "composeVectorize" }
+androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

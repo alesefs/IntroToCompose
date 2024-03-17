@@ -2,4 +2,6 @@
 <resources>
 
     <style name="Theme.IntroToCompose" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.CardStyles" parent="Theme.Material3.DayNight.NoActionBar" />
 </resources>

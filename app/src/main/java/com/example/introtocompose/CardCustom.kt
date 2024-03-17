@@ -14,13 +14,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.introtocompose.ui.theme.IntroToComposeTheme
-
-enum class CardCustomTypes {
-    Active,
-    Border,
-    Elevation,
-    Deactivate
-}
+import com.example.introtocompose.utils.BorderRadiusStyle
+import com.example.introtocompose.utils.BorderRadiusValues
+import com.example.introtocompose.utils.BorderValues
+import com.example.introtocompose.utils.CardCustomTypes
+import com.example.introtocompose.utils.ElevationValues
 
 object CardCustomDefaults {
     fun backgroundColor(
@@ -89,50 +87,6 @@ object CardCustomDefaults {
     }
 }
 
-enum class BorderRadiusStyle {
-    All,
-    None,
-    TopStart,
-    TopEnd,
-    BottomStart,
-    BottomEnd,
-    Top,
-    Bottom,
-    Start,
-    End,
-    TopStartBottomEnd,
-    TopEndBottomStart,
-    SharpTopStart,
-    SharpTopEnd,
-    SharpBottomStart,
-    SharpBottomEnd
-}
-
-enum class BorderRadiusValues(val value: Dp) {
-    XSmall(2.dp),
-    Small(4.dp),
-    Medium(8.dp),
-    Default(12.dp),
-    Large(16.dp),
-    XLarge(32.dp),
-    Round(999.dp),
-    Sharp(0.dp)
-}
-
-enum class BorderValues(val value: Dp) {
-    Small(1.dp),
-    Medium(2.dp),
-    Large(4.dp),
-    XLarge(8.dp)
-}
-
-enum class ElevationValues(val value: Dp) {
-    Small(1.dp),
-    Medium(2.dp),
-    Large(4.dp),
-    XLarge(8.dp)
-}
-
 sealed class CustomCardStyles {
     class Active(
         bgColor: Color = Color.White,
@@ -194,7 +148,7 @@ sealed class CustomCardStyles {
 
 @Composable
 fun CardCustomSta(
-    customCardStyles: CustomCardStyles,//???
+    customCardStyles: CustomCardStyles,
 //    type: CardCustomTypes,
 //    shapeStyle: Pair<BorderRadiusStyle, BorderRadiusValues>,
 //    borderSize: BorderValues,
