@@ -203,7 +203,7 @@ class CustomCard @JvmOverloads constructor(
                 customView(
                     background = CardCustomDefaults(context).backgroundColor(
                         type = type,
-                        backgroundColor = ContextCompat.getColor(context, bgColor)
+                        backgroundColor = context.getColor(bgColor)//ContextCompat.getColor(context, bgColor)
                     ),
                     cornerRadiiValues = CardCustomDefaults(context).roundCornerShape(
                         cornerRadiusValue = radiusValue,
@@ -216,7 +216,7 @@ class CustomCard @JvmOverloads constructor(
                 customView(
                     background = CardCustomDefaults(context).backgroundColor(
                         type = type,
-                        backgroundColor = ContextCompat.getColor(context, bgColor)
+                        backgroundColor = context.getColor(bgColor)//ContextCompat.getColor(context, bgColor)
                     ),
                     cornerRadiiValues = CardCustomDefaults(context).roundCornerShape(
                         cornerRadiusValue = radiusValue,
@@ -228,7 +228,7 @@ class CustomCard @JvmOverloads constructor(
                     ),
                     borderColor = CardCustomDefaults(context).borderColor(
                         type = type,
-                        color = ContextCompat.getColor(context, borderColor)
+                        color = context.getColor(borderColor)//ContextCompat.getColor(context, borderColor)
                     ),
                 )
             }
@@ -237,7 +237,7 @@ class CustomCard @JvmOverloads constructor(
                 customView(
                     background = CardCustomDefaults(context).backgroundColor(
                         type = type,
-                        backgroundColor = ContextCompat.getColor(context, bgColor)
+                        backgroundColor = context.getColor(bgColor)//ContextCompat.getColor(context, bgColor)
                     ),
                     cornerRadiiValues = CardCustomDefaults(context).roundCornerShape(
                         cornerRadiusValue = radiusValue,
@@ -254,7 +254,7 @@ class CustomCard @JvmOverloads constructor(
                 customView(
                     background = CardCustomDefaults(context).backgroundColor(
                         type = type,
-                        deactivateColor = ContextCompat.getColor(context, deactivateColor)
+                        deactivateColor = context.getColor(deactivateColor)//ContextCompat.getColor(context, deactivateColor)
                     ),
                     cornerRadiiValues = CardCustomDefaults(context).roundCornerShape(
                         cornerRadiusValue = radiusValue,
@@ -295,7 +295,7 @@ sealed class CustomCardStyles {
     ) : CustomCardStyles() {
         val color = CardCustomDefaults(context).backgroundColor(
             type = CardCustomTypes.Active,
-            backgroundColor = ContextCompat.getColor(context,  bgColor)
+            backgroundColor = context.getColor(bgColor)//ContextCompat.getColor(context,  bgColor)
         )
 
         val shape = CardCustomDefaults(context).roundCornerShape(
@@ -314,7 +314,7 @@ sealed class CustomCardStyles {
     ) : CustomCardStyles() {
         val color = CardCustomDefaults(context).backgroundColor(
             type = CardCustomTypes.Deactivate,
-            deactivateColor = ContextCompat.getColor(context,  deactivateColor)
+            deactivateColor = context.getColor(deactivateColor)//ContextCompat.getColor(context,  deactivateColor)
         )
 
         val shape = CardCustomDefaults(context).roundCornerShape(
@@ -334,7 +334,7 @@ sealed class CustomCardStyles {
     ) : CustomCardStyles() {
         val color = CardCustomDefaults(context).backgroundColor(
             type = CardCustomTypes.Active,
-            backgroundColor = ContextCompat.getColor(context,  bgColor)
+            backgroundColor = context.getColor(bgColor)//ContextCompat.getColor(context,  bgColor)
         )
 
         val shape = CardCustomDefaults(context).roundCornerShape(
@@ -347,7 +347,7 @@ sealed class CustomCardStyles {
                 CardCustomTypes.Border, borderStyle.first
             ),
             CardCustomDefaults(context).borderColor(
-                CardCustomTypes.Border, ContextCompat.getColor(context,  borderStyle.second)
+                CardCustomTypes.Border, context.getColor(borderStyle.second)//ContextCompat.getColor(context,  borderStyle.second)
             )
         )
     }
@@ -363,7 +363,7 @@ sealed class CustomCardStyles {
     ) : CustomCardStyles() {
         val color = CardCustomDefaults(context).backgroundColor(
             type = CardCustomTypes.Elevation,
-            backgroundColor = ContextCompat.getColor(context,  bgColor)
+            backgroundColor = context.getColor(bgColor)//ContextCompat.getColor(context,  bgColor)
         )
 
         val shape = CardCustomDefaults(context).roundCornerShape(
@@ -380,8 +380,8 @@ sealed class CustomCardStyles {
 class CardCustomDefaults(private val context: Context) {
     fun backgroundColor(
         type: CardCustomTypes,
-        backgroundColor: Int = ContextCompat.getColor(context, R.color.white),
-        deactivateColor: Int = ContextCompat.getColor(context, R.color.light_gray)
+        backgroundColor: Int = context.getColor(R.color.white),//ContextCompat.getColor(context, R.color.white),
+        deactivateColor: Int = context.getColor(R.color.light_gray)//ContextCompat.getColor(context, R.color.light_gray)
     ): Int {
         return when (type) {
             CardCustomTypes.Deactivate -> deactivateColor
@@ -525,7 +525,7 @@ class CardCustomDefaults(private val context: Context) {
 
     fun borderColor(
         type: CardCustomTypes,
-        color: Int = ContextCompat.getColor(context, R.color.black)
+        color: Int = context.getColor(R.color.black)//ContextCompat.getColor(context, R.color.black)
     ): Int {
         return when (type) {
             CardCustomTypes.Border -> color
