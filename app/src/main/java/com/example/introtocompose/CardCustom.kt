@@ -199,7 +199,7 @@ fun CardCustomSta(
 
 @Preview
 @Composable
-fun CustomCardPreview() {
+fun CustomCardPreview2() {
     IntroToComposeTheme {
         CardCustomSta(
 //            type = CardCustomTypes.Border,
