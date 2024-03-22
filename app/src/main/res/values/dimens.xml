@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="value0">0dp</dimen>
+    <dimen name="value1">1dp</dimen>
+    <dimen name="value2">2dp</dimen>
+    <dimen name="value4">4dp</dimen>
+    <dimen name="value8">8dp</dimen>
+    <dimen name="value12">12dp</dimen>
+    <dimen name="value16">16dp</dimen>
+    <dimen name="value32">32dp</dimen>
+    <dimen name="value999">999dp</dimen>
+
+</resources>

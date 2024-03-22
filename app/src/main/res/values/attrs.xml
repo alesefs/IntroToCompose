@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomCard">
+        <attr name="style" format="enum">
+            <enum name="active" value="0" />
+            <enum name="deactivate" value="1" />
+            <enum name="border" value="2" />
+            <enum name="elevation" value="3" />
+        </attr>
+
+        <attr name="strokeSize" format="enum">
+            <enum name="zero" value="0" />
+            <enum name="low" value="1" />
+            <enum name="medium" value="2" />
+            <enum name="large" value="3" />
+        </attr>
+
+        <attr name="elevationValue" format="enum">
+            <enum name="zero" value="0" />
+            <enum name="low" value="1" />
+            <enum name="medium" value="2" />
+            <enum name="large" value="3" />
+        </attr>
+
+        <attr name="cardRadius" format="enum">
+            <enum name="zero" value="0" />
+            <enum name="low" value="1" />
+            <enum name="medium" value="2" />
+            <enum name="large" value="3" />
+        </attr>
+
+        <attr name="borderStyle" format="enum">
+            <enum name="All" value="0" />
+            <enum name="None" value="1" />
+            <enum name="TopStart" value="2" />
+            <enum name="TopEnd" value="3" />
+            <enum name="BottomStart" value="4" />
+            <enum name="BottomEnd" value="5" />
+            <enum name="Top" value="6" />
+            <enum name="Bottom" value="7" />
+            <enum name="Start" value="8" />
+            <enum name="End" value="9" />
+            <enum name="TopStartBottomEnd" value="10" />
+            <enum name="TopEndBottomStart" value="11" />
+            <enum name="SharpTopStart" value="12" />
+            <enum name="SharpTopEnd" value="13" />
+            <enum name="SharpBottomStart" value="14" />
+            <enum name="SharpBottomEnd" value="15" />
+        </attr>
+
+        <attr name="borderColor" format="reference|color" />
+        <attr name="bgColor" format="reference|color" />
+        <attr name="highlightColor" format="reference|color" />
+    </declare-styleable>
+</resources>
