@@ -2,7 +2,6 @@ package com.example.introtocompose
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Button
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -336,7 +335,6 @@ fun PBSnackBarPreview() {
                     isStacked = true,
                 ) {
                     isClicked.value = !isClicked.value
-                    Log.d("ALELOG", "PBSnackBarPreview: Click!")
                 }
             }
         }
@@ -374,7 +372,6 @@ fun PBSnackBar2Preview() {
                     isStacked = true,
                 ) {
                     isClicked.value = !isClicked.value
-                    Log.d("ALELOG", "PBSnackBarPreview: Click!")
                 }
             }
         }
@@ -414,7 +411,6 @@ fun PBSnackBar3Preview() {
                     isStacked = false,
                 ) {
                     isClicked.value = !isClicked.value
-                    Log.d("ALELOG", "PBSnackBarPreview: Click!")
                 }
             }
         }
