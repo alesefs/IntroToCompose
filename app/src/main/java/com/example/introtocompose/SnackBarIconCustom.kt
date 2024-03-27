@@ -1,7 +1,6 @@
 package com.example.introtocompose
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -56,7 +55,7 @@ sealed class SnackBarType(
     val backgroundColor: Color,
     val contentColor: Color,
     val actionColor: Color,
-    open val supportVisual: ImageVector
+    val supportVisual: ImageVector?
 ) {
     data object Success : SnackBarType(
         backgroundColor = Color.Green,
@@ -80,21 +79,21 @@ sealed class SnackBarType(
     )
 
     data class System(
-        override val supportVisual: ImageVector = Icons.Default.AccountBox
+        val icon: ImageVector? = Icons.Default.AccountBox
     ) : SnackBarType(
         backgroundColor = Color.DarkGray,
         contentColor = Color.White,
         actionColor = Color.White,
-        supportVisual = supportVisual
+        supportVisual = icon
     )
 
     data class Informative(
-        override val supportVisual: ImageVector = Icons.Default.AccountBox
+        val showSupportVisual: Boolean = true
     ) : SnackBarType(
         backgroundColor = Color.Blue,
         contentColor = Color.White,
         actionColor = Color.White,
-        supportVisual = supportVisual
+        supportVisual = if (showSupportVisual) Icons.Default.AccountBox else null
     )
 }
 
@@ -167,13 +166,16 @@ fun StackedSnackBar(
                 .padding(16.dp)
         ) {
             Row {
-                Icon(
-                    type.supportVisual,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(24.dp),
-                    tint = type.contentColor
-                )
+
+                type.supportVisual?.let {
+                    Icon(
+                        type.supportVisual,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(24.dp),
+                        tint = type.contentColor
+                    )
+                }
 
                 Text(
                     text = message,
@@ -236,18 +238,20 @@ fun InLineSnackBar(
         ) {
             val (iconRefs, textRefs, btnRefs) = createRefs()
 
-            Icon(
-                type.supportVisual,
-                contentDescription = null,
-                modifier = Modifier
-                    .constrainAs(iconRefs) {
-                        start.linkTo(parent.start)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    }
-                    .size(24.dp),
-                tint = type.contentColor
-            )
+            type.supportVisual?.let {
+                Icon(
+                    type.supportVisual,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .constrainAs(iconRefs) {
+                            start.linkTo(parent.start)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                        }
+                        .size(24.dp),
+                    tint = type.contentColor
+                )
+            }
 
             Text(
                 text = message,
@@ -306,7 +310,7 @@ fun InLineSnackBar(
 
 @Preview
 @Composable
-fun PBSnackBarPreview() {
+fun SnackBar1Preview() {
     IntroToComposeTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -343,7 +347,7 @@ fun PBSnackBarPreview() {
 
 @Preview
 @Composable
-fun PBSnackBar2Preview() {
+fun SnackBar2Preview() {
     IntroToComposeTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -364,7 +368,7 @@ fun PBSnackBar2Preview() {
 
             if (isClicked.value) {
                 CustomSnackBarIcon(
-                    type = SnackBarType.Informative(Icons.Default.AccountCircle),
+                    type = SnackBarType.Informative(true),
                     message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                     actionLabel = "Click",
                     duration = SnackbarDuration.Indefinite,
@@ -380,7 +384,7 @@ fun PBSnackBar2Preview() {
 
 @Preview
 @Composable
-fun PBSnackBar3Preview() {
+fun SnackBar3Preview() {
     IntroToComposeTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
