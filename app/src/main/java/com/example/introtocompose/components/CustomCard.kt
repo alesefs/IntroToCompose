@@ -518,7 +518,7 @@ class CardCustomDefaults(private val context: Context) {
         val value0 = context.resources.getDimension(R.dimen.value0)
 
         return when (type) {
-            CardCustomTypes.Border -> valueInPixels.toInt()
+            CardCustomTypes.Border -> valueInPixels.toPx
             else -> value0.toInt()
         }
     }
@@ -546,3 +546,4 @@ class CardCustomDefaults(private val context: Context) {
         }
     }
 }
+
