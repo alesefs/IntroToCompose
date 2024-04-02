@@ -12,6 +12,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -21,7 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.introtocompose.ui.theme.IntroToComposeTheme
 import kotlinx.coroutines.launch
 
-@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun SnackBarCustom(
     message: String,
@@ -29,9 +29,8 @@ fun SnackBarCustom(
     duration: SnackbarDuration = SnackbarDuration.Short
 ) {
     val snackState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
 
-    scope.launch {
+    LaunchedEffect(key1 = snackState) {
         snackState.showSnackbar(
             message = message,
             actionLabel = actionLabel,
@@ -59,7 +58,7 @@ fun SnackBarPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
 
-            var isClicked = remember {
+            val isClicked = remember {
                 mutableStateOf(false)
             }
 
