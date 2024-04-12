@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -135,6 +136,7 @@ fun CreateCircle(moneyCounter: Int = 0, updateMoneyCount: (Int) -> Unit) {
         modifier = Modifier
             .padding(3.dp)
             .size(100.dp)
+            .clip(CircleShape)
             .clickable {
 //            moneyCounter += 1 //by
 //            moneyCounter.value += 1 //= (value ou intValue)
