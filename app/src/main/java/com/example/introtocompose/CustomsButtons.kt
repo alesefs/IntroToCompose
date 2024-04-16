@@ -32,12 +32,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -423,7 +420,7 @@ sealed class ButtonStyle(
 }
 
 @Composable
-fun IconButton(
+fun CustomIconButton(
     icon: ImageVector,
     buttonDescription: String,
     style: ButtonStyle,
@@ -472,7 +469,7 @@ fun IconButtonPreview() {
     val context = LocalContext.current
 
     Column {
-        IconButton(
+        CustomIconButton(
             style = ButtonStyle.Dark,
             icon = Icons.Rounded.Notifications,
             buttonDescription = "Notifications",
@@ -483,7 +480,7 @@ fun IconButtonPreview() {
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        IconButton(
+        CustomIconButton(
             style = ButtonStyle.Light,
             icon = Icons.Rounded.Notifications,
             buttonDescription = "Notifications",
