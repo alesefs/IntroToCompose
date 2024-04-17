@@ -224,6 +224,7 @@ fun TopBarConstraintLayout(
             is TopBarType.Text -> {
                 Text(
                     text = type.title,
+                    color = Color.White,
                     modifier = Modifier.layoutId(topBarTitle),
                     textAlign = TextAlign.Center,
                     overflow = TextOverflow.Ellipsis,

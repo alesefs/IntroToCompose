@@ -143,19 +143,18 @@ fun SuperScreen() {
                     .background(Color.White)
                     .padding(it)
             ) {
-                Text(text = "I'm a topBar")
+//                Text(text = "I'm a topBar")
 
                 IconButton(
                     modifier = Modifier
-                        .size(52.dp)
-                        .padding(4.dp)
                         .clip(CircleShape)
                         .shadow(
                             elevation = 1.dp,
                             shape = CircleShape,
                             ambientColor = Color.Red,
-//                                spotColor = Color.Red,
+                            spotColor = Color.Red,
                         )
+                        .size(64.dp)
                         /*.graphicsLayer(
                             shadowElevation = 4f,
                             ambientShadowColor = Color.Red,
@@ -163,7 +162,6 @@ fun SuperScreen() {
                         )*/
 //                        .offset(10.dp, 10.dp)
 //                        .blur(radius = 2.dp)
-
                     ,
                     colors = IconButtonColors(
                         containerColor = Color.Blue,
