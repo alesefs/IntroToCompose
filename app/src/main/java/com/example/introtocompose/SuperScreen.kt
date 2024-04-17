@@ -1,15 +1,20 @@
 package com.example.introtocompose
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -35,6 +40,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
@@ -154,12 +161,12 @@ fun SuperScreen() {
                             ambientColor = Color.Red,
                             spotColor = Color.Red,
                         )
-                        .size(64.dp)
-                        /*.graphicsLayer(
-                            shadowElevation = 4f,
-                            ambientShadowColor = Color.Red,
-                            spotShadowColor = Color.Gray,
-                        )*/
+                        .size(56.0.dp)
+                    /*.graphicsLayer(
+                        shadowElevation = 4f,
+                        ambientShadowColor = Color.Red,
+                        spotShadowColor = Color.Gray,
+                    )*/
 //                        .offset(10.dp, 10.dp)
 //                        .blur(radius = 2.dp)
                     ,
@@ -171,8 +178,254 @@ fun SuperScreen() {
                     ),
                     onClick = { /**/ }
                 ) {
-                    Icon(Icons.Filled.Add, null)
+                    Icon(Icons.Filled.Add, null, Modifier.size(24.0.dp))
                 }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun CustomBottomBar() {
+    Surface {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .background(Color.Blue)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    IconButton(
+                        modifier = Modifier.size(24.dp),
+                        onClick = { }
+                    ) {
+                        Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null, tint = Color.White)
+                    }
+                    Text(text = "setting", color = Color.White)
+                }
+
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    IconButton(
+                        modifier = Modifier.size(24.dp),
+                        onClick = { }
+                    ) {
+                        Icon(imageVector = Icons.Default.Settings, contentDescription = null, tint = Color.White)
+                    }
+                    Text(text = "setting", color = Color.White)
+                }
+
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    IconButton(
+                        modifier = Modifier.size(24.dp),
+                        onClick = { }
+                    ) {
+                        Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null, tint = Color.White)
+                    }
+                    Text(text = "setting", color = Color.White)
+                }
+
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    IconButton(
+                        modifier = Modifier.size(24.dp),
+                        onClick = { }
+                    ) {
+                        Icon(imageVector = Icons.Default.Settings, contentDescription = null, tint = Color.White)
+                    }
+                    Text(text = "setting", color = Color.White)
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun CustomBottomBarUpper(
+    indicator: Int = 2
+) {
+    /*ConstraintLayout(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(Color.Blue)
+    ) {
+        val (centerRef) = createRefs()
+
+
+        IconButton(
+            modifier = Modifier
+                .clip(CircleShape)
+                .shadow(
+                    elevation = 1.dp,
+                    shape = CircleShape,
+                    ambientColor = Color.Red,
+                    spotColor = Color.Red,
+                )
+                .size(56.0.dp)
+            ,
+            colors = IconButtonColors(
+                containerColor = Color.Blue,
+                disabledContainerColor = Color.LightGray,
+                contentColor = Color.White,
+                disabledContentColor = Color.DarkGray
+            ),
+            onClick = { *//**//* }
+        ) {
+            Icon(Icons.Filled.Add, null, Modifier.size(24.0.dp))
+        }
+    }*/
+
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(64.dp)
+    ) {
+        val (boxRef, centerBtnRef, leftRowBtnRef, rightRowBtnRef, boxIndicatorRef, ponterRef) = createRefs()
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(6.dp)
+                .background(Color.Green)
+                .constrainAs(boxIndicatorRef) {
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                }
+        )
+
+        Box(
+            modifier = Modifier
+                .width(42.dp)
+                .height(6.dp)
+                .background(Color.Red)
+                .constrainAs(ponterRef) {
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                }
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .background(Color.Blue)
+                .constrainAs(boxRef) {
+                    bottom.linkTo(boxIndicatorRef.top)
+                    start.linkTo(parent.start)
+                }
+        )
+
+        IconButton(
+            modifier = Modifier
+                .clip(CircleShape)
+                .border(3.dp, Color.Blue, CircleShape)
+                .size(56.0.dp)
+                .constrainAs(centerBtnRef) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
+            colors = IconButtonColors(
+                containerColor = Color.Green,
+                disabledContainerColor = Color.LightGray,
+                contentColor = Color.DarkGray,
+                disabledContentColor = Color.DarkGray
+            ),
+            onClick = { }
+        ) {
+            Icon(Icons.Filled.Add, null, Modifier.size(24.0.dp))
+        }
+
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .constrainAs(leftRowBtnRef) {
+                    top.linkTo(boxRef.top)
+                    bottom.linkTo(boxRef.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(centerBtnRef.start)
+                    width = Dimension.fillToConstraints
+                    height = Dimension.fillToConstraints
+                },
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                IconButton(
+                    modifier = Modifier.size(24.dp),
+                    onClick = { }
+                ) {
+                    Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null, tint = Color.White)
+                }
+                Text(text = "setting", color = Color.White)
+            }
+
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                IconButton(
+                    modifier = Modifier.size(24.dp),
+                    onClick = { }
+                ) {
+                    Icon(imageVector = Icons.Default.Settings, contentDescription = null, tint = Color.White)
+                }
+                Text(text = "setting", color = Color.White)
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .constrainAs(rightRowBtnRef) {
+                    top.linkTo(boxRef.top)
+                    bottom.linkTo(boxRef.bottom)
+                    start.linkTo(centerBtnRef.end)
+                    end.linkTo(parent.end)
+                    width = Dimension.fillToConstraints
+                    height = Dimension.fillToConstraints
+                },
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                IconButton(
+                    modifier = Modifier.size(24.dp),
+                    onClick = { }
+                ) {
+                    Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null, tint = Color.White)
+                }
+                Text(text = "setting", color = Color.White)
+            }
+
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                IconButton(
+                    modifier = Modifier.size(24.dp),
+                    onClick = { }
+                ) {
+                    Icon(imageVector = Icons.Default.Settings, contentDescription = null, tint = Color.White)
+                }
+                Text(text = "setting", color = Color.White)
             }
         }
     }
