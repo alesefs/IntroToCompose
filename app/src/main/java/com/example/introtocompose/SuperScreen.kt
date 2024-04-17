@@ -1,10 +1,13 @@
 package com.example.introtocompose
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +24,10 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
@@ -152,8 +159,9 @@ fun SuperScreen() {
             ) {
 //                Text(text = "I'm a topBar")
 
-                IconButton(
+                /*IconButton(
                     modifier = Modifier
+                        .size(56.0.dp)
                         .clip(CircleShape)
                         .shadow(
                             elevation = 1.dp,
@@ -161,12 +169,12 @@ fun SuperScreen() {
                             ambientColor = Color.Red,
                             spotColor = Color.Red,
                         )
-                        .size(56.0.dp)
-                    /*.graphicsLayer(
-                        shadowElevation = 4f,
-                        ambientShadowColor = Color.Red,
-                        spotShadowColor = Color.Gray,
-                    )*/
+
+//                    .graphicsLayer(
+//                        shadowElevation = 4f,
+//                        ambientShadowColor = Color.Red,
+//                        spotShadowColor = Color.Gray,
+//                    )
 //                        .offset(10.dp, 10.dp)
 //                        .blur(radius = 2.dp)
                     ,
@@ -176,10 +184,72 @@ fun SuperScreen() {
                         contentColor = Color.White,
                         disabledContentColor = Color.DarkGray
                     ),
-                    onClick = { /**/ }
+                    onClick = { *//**//* }
                 ) {
                     Icon(Icons.Filled.Add, null, Modifier.size(24.0.dp))
+                }*/
+
+                Button(
+                    modifier = Modifier
+                        .size(56.0.dp)
+                        .shadow(
+                            elevation = 16.dp,
+                            shape = CircleShape,
+                            ambientColor = Color.Red,
+                            spotColor = Color.Red,
+                        ),
+                    shape = CircleShape,
+                    colors =  ButtonDefaults.buttonColors(
+                        containerColor = Color.Blue,
+                        disabledContainerColor = Color.LightGray,
+                        contentColor = Color.White,
+                        disabledContentColor = Color.DarkGray
+                    ),
+                    contentPadding = PaddingValues(8.dp),
+                    elevation = ButtonDefaults.buttonElevation(
+                        defaultElevation = 16.dp,
+                        pressedElevation = 16.dp,
+                        focusedElevation = 16.dp,
+                        hoveredElevation = 16.dp,
+                        disabledElevation = 16.dp
+                    ),
+                    onClick = { /*TODO*/ }
+                ) {
+                    Icon(Icons.Filled.Add, null, Modifier.size(24.dp))
                 }
+
+                /*Card(
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .size(56.dp)
+                        .clip(CircleShape)
+                        .clickable {
+                            Log.d("ALELOG", "moneyCounter")
+                        }
+                    ,
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Blue,
+                        disabledContainerColor = Color.LightGray,
+                        contentColor = Color.White,
+                        disabledContentColor = Color.DarkGray
+                    ),
+                    shape = CircleShape,
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 16.dp,
+                        pressedElevation = 16.dp,
+                        focusedElevation = 16.dp,
+                        hoveredElevation = 16.dp,
+                        draggedElevation = 16.dp,
+                        disabledElevation = 16.dp
+                    )
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(Icons.Filled.Add, null, Modifier.size(24.0.dp))
+                    }
+                }*/
             }
         }
     }
