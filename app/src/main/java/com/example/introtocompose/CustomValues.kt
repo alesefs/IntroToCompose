@@ -63,6 +63,7 @@ fun CustomValues(
     financialFractor: Boolean = false,
     darkContentColor: Boolean = true,
     absoluteColor: Boolean = false,
+    inline: Boolean = false
 ) {
     val contentColor =
         if (darkContentColor) {
@@ -88,99 +89,82 @@ fun CustomValues(
             }
         }
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .background(Color.Gray)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            text?.let {
-                Text(
-                    text = text,
-                    color = contentColor,
-                    textAlign = TextAlign.Start,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    style = TextStyle(
-                        fontFamily = FontFamily.SansSerif,
-                        letterSpacing = 0.sp,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 16.sp
-                    )
-                )
-                Spacer(modifier = Modifier.size(4.dp))
-            }
-
-            icon?.let {
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    imageVector = icon.icon,
-                    contentDescription = icon.iconDescription,
-                    tint = contentColor
-                )
-            }
-        }
-
-        Row(
+    if(!inline) {
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
         ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                text?.let {
+                    Text(
+                        text = text,
+                        color = contentColor,
+                        textAlign = TextAlign.Start,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = TextStyle(
+                            fontFamily = FontFamily.SansSerif,
+                            letterSpacing = 0.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 16.sp
+                        )
+                    )
+                    Spacer(modifier = Modifier.size(4.dp))
+                }
 
-            val spacing = if (value.toInt() != 0) {
-                4.dp
-            } else {
-                0.dp
+                icon?.let {
+                    Icon(
+                        modifier = Modifier.size(16.dp),
+                        imageVector = icon.icon,
+                        contentDescription = icon.iconDescription,
+                        tint = contentColor
+                    )
+                }
             }
 
-            Text(
-                modifier = Modifier.padding(end = spacing),
-                text = if (value > 0) {
-                    "+"
-                } else if (value < 0) {
-                    "-"
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+            ) {
+
+                val spacing = if (value.toInt() != 0) {
+                    4.dp
                 } else {
-                    ""
-                },
-                color = contentValueColor,
-                textAlign = TextAlign.Start,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-                style = TextStyle(
-                    fontFamily = FontFamily.SansSerif,
-                    letterSpacing = 0.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 24.sp
-                )
-            )
+                    0.dp
+                }
 
-            Text(
-                text = "R$ ",
-                color = contentValueColor,
-                textAlign = TextAlign.Start,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-                style = TextStyle(
-                    fontFamily = FontFamily.SansSerif,
-                    letterSpacing = 0.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 24.sp
-                )
-            )
+                if (showValue) {
+                    Text(
+                        modifier = Modifier.padding(end = spacing),
+                        text = if (value > 0) {
+                            "+"
+                        } else if (value < 0) {
+                            "-"
+                        } else {
+                            ""
+                        },
+                        color = contentValueColor,
+                        textAlign = TextAlign.Start,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = TextStyle(
+                            fontFamily = FontFamily.SansSerif,
+                            letterSpacing = 0.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 24.sp
+                        )
+                    )
+                }
 
-            if (showValue) {
                 Text(
-                    text = if (financialFractor) {
-                        String.format("%.4f", value.absoluteValue)
-                    } else {
-                        String.format("%.2f", value.absoluteValue)
-                    },
+                    text = "R$ ",
                     color = contentValueColor,
                     textAlign = TextAlign.Start,
                     overflow = TextOverflow.Ellipsis,
@@ -192,10 +176,120 @@ fun CustomValues(
                         fontSize = 24.sp
                     )
                 )
-            } else {
+
+                if (showValue) {
+                    Text(
+                        text = if (financialFractor) {
+                            String.format("%.4f", value.absoluteValue)
+                        } else {
+                            String.format("%.2f", value.absoluteValue)
+                        },
+                        color = contentValueColor,
+                        textAlign = TextAlign.Start,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = TextStyle(
+                            fontFamily = FontFamily.SansSerif,
+                            letterSpacing = 0.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 24.sp
+                        )
+                    )
+                } else {
+                    Text(
+                        text = "••••••",
+                        color = contentColor,
+                        textAlign = TextAlign.Start,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = TextStyle(
+                            fontFamily = FontFamily.SansSerif,
+                            letterSpacing = 0.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 24.sp
+                        )
+                    )
+                }
+
+            }
+        }
+    } else {
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                modifier = Modifier
+                    .wrapContentSize(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                text?.let {
+                    Text(
+                        text = text,
+                        color = contentColor,
+                        textAlign = TextAlign.Start,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = TextStyle(
+                            fontFamily = FontFamily.SansSerif,
+                            letterSpacing = 0.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 16.sp
+                        )
+                    )
+                    Spacer(modifier = Modifier.size(4.dp))
+                }
+
+                icon?.let {
+                    Icon(
+                        modifier = Modifier.size(16.dp),
+                        imageVector = icon.icon,
+                        contentDescription = icon.iconDescription,
+                        tint = contentColor
+                    )
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .wrapContentSize()
+            ) {
+
+                val spacing = if (value.toInt() != 0) {
+                    4.dp
+                } else {
+                    0.dp
+                }
+
+                if (showValue) {
+                    Text(
+                        modifier = Modifier.padding(end = spacing),
+                        text = if (value > 0) {
+                            "+"
+                        } else if (value < 0) {
+                            "-"
+                        } else {
+                            ""
+                        },
+                        color = contentValueColor,
+                        textAlign = TextAlign.Start,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = TextStyle(
+                            fontFamily = FontFamily.SansSerif,
+                            letterSpacing = 0.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 24.sp
+                        )
+                    )
+                }
+
                 Text(
-                    text = "••••••",
-                    color = contentColor,
+                    text = "R$ ",
+                    color = contentValueColor,
                     textAlign = TextAlign.Start,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
@@ -206,8 +300,42 @@ fun CustomValues(
                         fontSize = 24.sp
                     )
                 )
-            }
 
+                if (showValue) {
+                    Text(
+                        text = if (financialFractor) {
+                            String.format("%.4f", value.absoluteValue)
+                        } else {
+                            String.format("%.2f", value.absoluteValue)
+                        },
+                        color = contentValueColor,
+                        textAlign = TextAlign.Start,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = TextStyle(
+                            fontFamily = FontFamily.SansSerif,
+                            letterSpacing = 0.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 24.sp
+                        )
+                    )
+                } else {
+                    Text(
+                        text = "••••••",
+                        color = contentColor,
+                        textAlign = TextAlign.Start,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = TextStyle(
+                            fontFamily = FontFamily.SansSerif,
+                            letterSpacing = 0.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 24.sp
+                        )
+                    )
+                }
+
+            }
         }
     }
 }
@@ -231,7 +359,7 @@ fun CustomValuesPreview() {
         }
 
         val decimalsText = remember {
-            mutableStateOf("4")
+            mutableStateOf("2")
         }
 
         val contentColor = remember {
@@ -246,7 +374,18 @@ fun CustomValuesPreview() {
             mutableDoubleStateOf(0.00)
         }
 
-        Column {
+        val absoluteColor = remember {
+            mutableStateOf(false)
+        }
+
+        val inline = remember {
+            mutableStateOf(false)
+        }
+
+        Column (
+            modifier = Modifier
+                .background(Color.Gray)
+        ) {
             CustomValues(
                 value = value.doubleValue,
                 text = "teste value",
@@ -254,7 +393,8 @@ fun CustomValuesPreview() {
                 showValue = showValue.value,
                 financialFractor = decimals.value,
                 darkContentColor = contentColor.value,
-                absoluteColor = false
+                absoluteColor = absoluteColor.value,
+                inline = inline.value
             )
 
             Spacer(modifier = Modifier.size(4.dp))
@@ -270,6 +410,12 @@ fun CustomValuesPreview() {
                 }
 
                 Button(onClick = {
+                    value.doubleValue =  0.0000
+                }) {
+                    Text(text = "reset value")
+                }
+
+                Button(onClick = {
                     showValue.value = !showValue.value
                     showValueText.value = if (showValue.value) "hide" else "show"
                 }) {
@@ -278,16 +424,33 @@ fun CustomValuesPreview() {
 
                 Button(onClick = {
                     decimals.value = !decimals.value
-                    decimalsText.value = if (decimals.value) "4" else "2"
+                    decimalsText.value = if (decimals.value) "2" else "4"
                 }) {
-                    Text(text = "${decimalsText.value} value")
+                    Text(text = "${decimalsText.value} dec")
                 }
+            }
 
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
                 Button(onClick = {
                     contentColor.value = !contentColor.value
                     contentColorText.value = if (contentColor.value) "Light" else "Dark"
                 }) {
                     Text(text = contentColorText.value)
+                }
+
+                Button(onClick = {
+                    absoluteColor.value = !absoluteColor.value
+                }) {
+                    Text(text = "absoluteColor")
+                }
+
+                Button(onClick = {
+                    inline.value = !inline.value
+                }) {
+                    Text(text = "inline")
                 }
             }
 
