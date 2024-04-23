@@ -1,5 +1,6 @@
 package com.example.introtocompose
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
@@ -33,6 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.introtocompose.ui.theme.IntroToComposeTheme
 import com.example.introtocompose.utils.thenIf
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.Locale
 import kotlin.math.absoluteValue
 import kotlin.random.Random
 
@@ -49,11 +54,14 @@ fun CustomValues(
     value: Double,
     text: String?,
     icon: CustomIconAndDescription?,
+    modifier: Modifier = Modifier,
     showValue: Boolean = true,
     financialFractor: Boolean = false,
     darkContentColor: Boolean = true,
     absoluteColor: Boolean = false,
-    inline: Boolean = false
+    inline: Boolean = false,
+    isWrap: Boolean = false,
+    showSignal: Boolean = true
 ) {
     val contentColor =
         if (darkContentColor) {
@@ -79,28 +87,53 @@ fun CustomValues(
             }
         }
 
-    if(!inline) {
+    if (!inline) {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
         ) {
             TitleRow(text, contentColor, icon, inline)
 
-            ValueRow(value, showValue, contentValueColor, financialFractor, contentColor, inline)
+            ValueRow(
+                value,
+                showValue,
+                contentValueColor,
+                financialFractor,
+                contentColor,
+                inline,
+                showSignal
+            )
         }
     } else {
-        Row (
+        Row(
             modifier = Modifier
-                .fillMaxWidth()
+                .applyWidth(isWrap)
                 .wrapContentHeight(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             TitleRow(text, contentColor, icon, inline)
 
-            ValueRow(value, showValue, contentValueColor, financialFractor, contentColor, inline)
+            ValueRow(
+                value,
+                showValue,
+                contentValueColor,
+                financialFractor,
+                contentColor,
+                inline,
+                showSignal
+            )
         }
+    }
+}
+
+@SuppressLint("UnnecessaryComposedModifier")
+private fun Modifier.applyWidth(wrap: Boolean) = composed {
+    if (!wrap) {
+        fillMaxWidth()
+    } else {
+        wrapContentWidth()
     }
 }
 
@@ -111,7 +144,8 @@ private fun ValueRow(
     contentValueColor: Color,
     financialFractor: Boolean,
     contentColor: Color,
-    inline: Boolean
+    inline: Boolean,
+    showSignal: Boolean
 ) {
     Row(
         modifier = Modifier
@@ -131,26 +165,28 @@ private fun ValueRow(
         }
 
         if (showValue) {
-            Text(
-                modifier = Modifier.padding(end = spacing),
-                text = if (value > 0) {
-                    "+"
-                } else if (value < 0) {
-                    "-"
-                } else {
-                    ""
-                },
-                color = contentValueColor,
-                textAlign = TextAlign.Start,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-                style = TextStyle(
-                    fontFamily = FontFamily.SansSerif,
-                    letterSpacing = 0.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 24.sp
+            if (showSignal) {
+                Text(
+                    modifier = Modifier.padding(end = spacing),
+                    text = if (value > 0) {
+                        "+"
+                    } else if (value < 0) {
+                        "-"
+                    } else {
+                        ""
+                    },
+                    color = contentValueColor,
+                    textAlign = TextAlign.Start,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                    style = TextStyle(
+                        fontFamily = FontFamily.SansSerif,
+                        letterSpacing = 0.sp,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 24.sp
+                    )
                 )
-            )
+            }
         }
 
         Text(
@@ -166,13 +202,17 @@ private fun ValueRow(
                 fontSize = 24.sp
             )
         )
-
+        val formatter = NumberFormat.getInstance(Locale("pt", "BR"))
         if (showValue) {
             Text(
                 text = if (financialFractor) {
-                    String.format("%.4f", value.absoluteValue)
+//                    String.format("%.4f", value.absoluteValue)
+                    formatter.maximumFractionDigits = 4
+                    formatter.format(value.absoluteValue)
                 } else {
-                    String.format("%.2f", value.absoluteValue)
+//                    String.format("%.2f", value.absoluteValue)
+                    formatter.maximumFractionDigits = 2
+                    formatter.format(value.absoluteValue)
                 },
                 color = contentValueColor,
                 textAlign = TextAlign.Start,
@@ -202,6 +242,12 @@ private fun ValueRow(
         }
 
     }
+}
+
+fun currencyFormatter(num: Double): String {
+    val m = num
+    val formatter = DecimalFormat("###.###.###,####")
+    return formatter.format(m)
 }
 
 @Composable
@@ -247,6 +293,8 @@ private fun TitleRow(
                 tint = contentColor
             )
         }
+
+        Spacer(modifier = Modifier.size(16.dp))
     }
 }
 
@@ -292,7 +340,11 @@ fun CustomValuesPreview() {
             mutableStateOf(false)
         }
 
-        Column (
+        val signal = remember {
+            mutableStateOf(false)
+        }
+
+        Column(
             modifier = Modifier
                 .background(Color.Gray)
         ) {
@@ -304,7 +356,8 @@ fun CustomValuesPreview() {
                 financialFractor = decimals.value,
                 darkContentColor = contentColor.value,
                 absoluteColor = absoluteColor.value,
-                inline = inline.value
+                inline = inline.value,
+                showSignal = signal.value
             )
 
             Spacer(modifier = Modifier.size(4.dp))
@@ -314,13 +367,13 @@ fun CustomValuesPreview() {
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 Button(onClick = {
-                    value.doubleValue =  Random.nextDouble(-1000.0000, 1000.0000)
+                    value.doubleValue = Random.nextDouble(-10000000.0000, 10000000.0000)
                 }) {
                     Text(text = "new value")
                 }
 
                 Button(onClick = {
-                    value.doubleValue =  0.0000
+                    value.doubleValue = 0.0000
                 }) {
                     Text(text = "reset value")
                 }
@@ -362,8 +415,56 @@ fun CustomValuesPreview() {
                 }) {
                     Text(text = "inline")
                 }
+
+                Button(onClick = {
+                    signal.value = !signal.value
+                }) {
+                    Text(text = "signal")
+                }
             }
 
         }
+    }
+}
+
+@Preview
+@Composable
+fun CustomValuesPreview2() {
+    IntroToComposeTheme {
+        CustomValues(
+            modifier = Modifier
+                .background(Color.Gray)
+                .wrapContentWidth(),
+            value = 20000.00,
+            text = "teste value",
+            icon = CustomIconAndDescription(Icons.Default.AccountCircle, null),
+            showValue = true,
+            financialFractor = false,
+            darkContentColor = true,
+            absoluteColor = false,
+            inline = true,
+            isWrap = true
+        )
+    }
+}
+
+@Preview
+@Composable
+fun CustomValuesPreview3() {
+    IntroToComposeTheme {
+        CustomValues(
+            modifier = Modifier
+                .background(Color.Gray)
+                .wrapContentWidth(),
+            value = 20000.00,
+            text = "teste value",
+            icon = CustomIconAndDescription(Icons.Default.AccountCircle, null),
+            showValue = true,
+            financialFractor = false,
+            darkContentColor = true,
+            absoluteColor = false,
+            inline = true,
+            isWrap = false
+        )
     }
 }
