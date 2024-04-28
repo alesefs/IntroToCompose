@@ -1,9 +1,12 @@
 package com.example.introtocompose
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,12 +24,15 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,9 +42,17 @@ import com.example.introtocompose.ui.theme.IntroToComposeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge(
+            /*statusBarStyle = SystemBarStyle.light(
+                android.graphics.Color.TRANSPARENT,
+                android.graphics.Color.TRANSPARENT
+            )*/
+        )
+
         super.onCreate(savedInstanceState)
         setContent {
             IntroToComposeTheme {
+                setStatusBarColor(color = Color.Green)
                 // A surface container using the 'background' color from the theme
                 /*Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -172,3 +186,14 @@ fun GreetingPreview() {
     }
 }
 
+@Composable
+fun setStatusBarColor(color: Color) {
+    val view = LocalView.current
+
+    if (!view.isInEditMode) {
+        LaunchedEffect(key1 = true) {
+            val windows = (view.context as Activity).window
+            windows.statusBarColor = color.toArgb()
+        }
+    }
+}

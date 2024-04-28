@@ -250,7 +250,7 @@ fun SuperScreen() {
 
 @Preview
 @Composable
-fun CustomBottomBar() {
+fun CustomBottomBarSuper() {
     Surface {
         Box(
             modifier = Modifier
