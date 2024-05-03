@@ -63,6 +63,49 @@ fun CustomValues(
     isWrap: Boolean = false,
     showSignal: Boolean = true
 ) {
+    /*
+    fun main() {
+        val valor: String = "R$ -0,01"
+
+        val signValue: String = if (valor.contains("-", true) &&
+                valor.trim().replace("R$", "").replace(" ", "").replace(",", ".").toDouble() < 0
+                                   ) {
+            "-"
+        } else if (valor.contains("+", true) ||
+                valor.trim().replace("R$", "").replace(" ", "").replace(",", ".").toDouble() > 0
+                  ) {
+            "+"
+        } else {
+            ""
+        }
+
+        println(signValue)
+    }
+
+    fun main() {
+	val valor: String = "R$ -5.000.000,00"
+//     val valor: String = "R$ -5000000,01"
+
+    val stringWithoutLettersAndDollar = valor.replace(Regex("[a-zA-Z\$]"), "")
+    val monetaryValue = valor.trim().replace(Regex("[a-zA-Z\$]"), "").replace(" ", "").replace(".", "").replace(",", ".")
+
+    val signValue: String = if (valor.contains("-", true) &&
+            monetaryValue.toDouble() < 0
+                               ) {
+        "-"
+    } else if (valor.contains("+", true) ||
+            monetaryValue.toDouble() > 0
+              ) {
+        "+"
+	} else {
+        ""
+    }
+
+    println(signValue)
+    println(monetaryValue)
+}
+     */
+
     val contentColor =
         if (darkContentColor) {
             Color.Black
