@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,7 +54,7 @@ sealed class CustomIconStyle (val shapeColor: Color, val iconColor: Color) {
 
     class Info : CustomIconStyle(shapeColor = CustomIconsColor.LightCyan, iconColor = CustomIconsColor.DarkCyan)
 
-    class Neutral : CustomIconStyle(shapeColor = Color.LightGray, iconColor = Color.DarkGray)
+    class Neutral(val showShape: Boolean) : CustomIconStyle(shapeColor = Color.LightGray, iconColor = Color.DarkGray)
 
     data class Custom (
         val shapedColor: Color = Color.LightGray,
@@ -152,25 +153,21 @@ fun CustomIconsPreview() {
                 CustomIcons(
                     CustomIconsSize.Large,
                     CustomIconStyle.Success(),
-                    showShape = true
                 )
 
                 CustomIcons(
                     CustomIconsSize.Medium,
                     CustomIconStyle.Success(),
-                    showShape = true
                 )
 
                 CustomIcons(
                     CustomIconsSize.Small,
                     CustomIconStyle.Success(),
-                    showShape = true
                 )
 
                 CustomIcons(
                     CustomIconsSize.Small,
                     CustomIconStyle.Success(),
-                    showShape = false
                 )
             }
 
@@ -180,19 +177,16 @@ fun CustomIconsPreview() {
                 CustomIcons(
                     CustomIconsSize.Large,
                     CustomIconStyle.Warning(),
-                    showShape = true
                 )
 
                 CustomIcons(
                     CustomIconsSize.Medium,
                     CustomIconStyle.Warning(),
-                    showShape = true
                 )
 
                 CustomIcons(
                     CustomIconsSize.Small,
                     CustomIconStyle.Warning(),
-                    showShape = true
                 )
             }
 
@@ -202,19 +196,16 @@ fun CustomIconsPreview() {
                 CustomIcons(
                     CustomIconsSize.Large,
                     CustomIconStyle.Error(),
-                    showShape = true
                 )
 
                 CustomIcons(
                     CustomIconsSize.Medium,
                     CustomIconStyle.Error(),
-                    showShape = true
                 )
 
                 CustomIcons(
                     CustomIconsSize.Small,
                     CustomIconStyle.Error(),
-                    showShape = true
                 )
             }
 
@@ -224,19 +215,16 @@ fun CustomIconsPreview() {
                 CustomIcons(
                     CustomIconsSize.Large,
                     CustomIconStyle.Info(),
-                    showShape = true
                 )
 
                 CustomIcons(
                     CustomIconsSize.Medium,
                     CustomIconStyle.Info(),
-                    showShape = true
                 )
 
                 CustomIcons(
                     CustomIconsSize.Small,
                     CustomIconStyle.Info(),
-                    showShape = true
                 )
             }
 
@@ -246,25 +234,21 @@ fun CustomIconsPreview() {
                 CustomIcons(
                     CustomIconsSize.Large,
                     CustomIconStyle.Custom(Color.Magenta, Color.Cyan),
-                    showShape = true
                 )
 
                 CustomIcons(
                     CustomIconsSize.Medium,
                     CustomIconStyle.Custom(Color.Magenta, Color.Cyan),
-                    showShape = true
                 )
 
                 CustomIcons(
                     CustomIconsSize.Small,
                     CustomIconStyle.Custom(Color.Magenta, Color.Cyan),
-                    showShape = true
                 )
 
                 CustomIcons(
                     CustomIconsSize.Small,
                     CustomIconStyle.Custom(Color.Magenta, Color.Cyan),
-                    showShape = false
                 )
             }
 
@@ -273,26 +257,22 @@ fun CustomIconsPreview() {
             ) {
                 CustomIcons(
                     CustomIconsSize.Large,
-                    CustomIconStyle.Neutral(),
-                    showShape = true
+                    CustomIconStyle.Neutral(showShape = true),
                 )
 
                 CustomIcons(
                     CustomIconsSize.Medium,
-                    CustomIconStyle.Neutral(),
-                    showShape = true
+                    CustomIconStyle.Neutral(showShape = true),
                 )
 
                 CustomIcons(
                     CustomIconsSize.Small,
-                    CustomIconStyle.Neutral(),
-                    showShape = true
+                    CustomIconStyle.Neutral(showShape = true),
                 )
 
                 CustomIcons(
                     CustomIconsSize.Small,
-                    CustomIconStyle.Neutral(),
-                    showShape = false
+                    CustomIconStyle.Neutral(showShape = false),
                 )
             }
 
@@ -304,20 +284,16 @@ fun CustomIconsPreview() {
 fun CustomIcons(
     size: CustomIconsSize,
     style: CustomIconStyle,
-    showShape: Boolean,
-    icon: Painter = rememberVectorPainter(image = Icons.Filled.Add)
+    icon: Painter = rememberVectorPainter(image = Icons.Filled.CheckCircle)
 ) {
-    val showShaped = if (style !is CustomIconStyle.Neutral) {
-        true
-    } else {
-        showShape
-    }
+    val showShaped = if (style is CustomIconStyle.Neutral) style.showShape else true
+
     Box(modifier = Modifier
         .thenIf(showShaped) {
-            size(size.shapeSize)
-                .clip(CircleShape)
-                .background(style.shapeColor)
-                .padding(size.padding)
+            padding(size.padding)
+            .size(size.shapeSize)
+            .clip(CircleShape)
+            .background(style.shapeColor)
         }
     ) {
         Image(
