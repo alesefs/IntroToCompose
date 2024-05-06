@@ -324,11 +324,8 @@ fun CustomIcons(
                 .clip(CircleShape)
                 .background(style.shapeColor)
                 .padding(size.padding)
-                .size(size.iconSize)
             }
-            .thenIf(!showShaped) {
-                size(size.iconSize)
-            },
+            .size(size.iconSize),
         painter = icon,
         contentDescription = null,
         colorFilter = ColorFilter.tint(style.iconColor, BlendMode.SrcIn)
