@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -35,12 +36,30 @@ object CustomIconsColor {
     val DarkCyan = Color(0xFF002939)
 }
 
-enum class CustomIconsStyle(val shapeColor: Color, val iconColor: Color) {
+/*enum class CustomIconsStyle(val shapeColor: Color, val iconColor: Color) {
     Success(CustomIconsColor.LightGreen, CustomIconsColor.DarkGreen),
     Warning(CustomIconsColor.LightYellow, CustomIconsColor.DarkYellow),
     Error(CustomIconsColor.LightRed, CustomIconsColor.DarkRed),
     Info(CustomIconsColor.LightCyan, CustomIconsColor.DarkCyan),
     Neutral(Color.LightGray, Color.DarkGray)
+}*/
+
+sealed class CustomIconStyle (val shapeColor: Color, val iconColor: Color) {
+    class Success() : CustomIconStyle(shapeColor = CustomIconsColor.LightGreen, iconColor = CustomIconsColor.DarkGreen)
+
+    class Warning() : CustomIconStyle(shapeColor = CustomIconsColor.LightYellow, iconColor = CustomIconsColor.DarkYellow)
+
+    class Error() : CustomIconStyle(shapeColor = CustomIconsColor.LightRed, iconColor = CustomIconsColor.DarkRed)
+
+    class Info() : CustomIconStyle(shapeColor = CustomIconsColor.LightCyan, iconColor = CustomIconsColor.DarkCyan)
+
+    class Neutral() : CustomIconStyle(shapeColor = Color.LightGray, iconColor = Color.DarkGray)
+
+    data class Custom (
+        val shapedColor: Color = Color.LightGray,
+        val iconeColor: Color = Color.DarkGray
+    ) : CustomIconStyle(shapeColor = shapedColor, iconColor = iconeColor)
+
 }
 
 enum class CustomIconsSize(val padding: Dp, val iconSize: Dp, val shapeSize: Dp) {
@@ -49,7 +68,7 @@ enum class CustomIconsSize(val padding: Dp, val iconSize: Dp, val shapeSize: Dp)
     Small(4.dp, 16.dp, 24.dp)
 }
 
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
 fun CustomIconsPreview() {
     IntroToComposeTheme {
@@ -117,21 +136,189 @@ fun CustomIconsPreview() {
             )
         }
     }
+}*/
+
+
+@Preview(showBackground = true)
+@Composable
+fun CustomIconsPreview() {
+    IntroToComposeTheme {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CustomIcons(
+                    CustomIconsSize.Large,
+                    CustomIconStyle.Success(),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Medium,
+                    CustomIconStyle.Success(),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Small,
+                    CustomIconStyle.Success(),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Small,
+                    CustomIconStyle.Success(),
+                    showShape = false
+                )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CustomIcons(
+                    CustomIconsSize.Large,
+                    CustomIconStyle.Warning(),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Medium,
+                    CustomIconStyle.Warning(),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Small,
+                    CustomIconStyle.Warning(),
+                    showShape = true
+                )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CustomIcons(
+                    CustomIconsSize.Large,
+                    CustomIconStyle.Error(),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Medium,
+                    CustomIconStyle.Error(),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Small,
+                    CustomIconStyle.Error(),
+                    showShape = true
+                )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CustomIcons(
+                    CustomIconsSize.Large,
+                    CustomIconStyle.Info(),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Medium,
+                    CustomIconStyle.Info(),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Small,
+                    CustomIconStyle.Info(),
+                    showShape = true
+                )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CustomIcons(
+                    CustomIconsSize.Large,
+                    CustomIconStyle.Custom(Color.Magenta, Color.Cyan),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Medium,
+                    CustomIconStyle.Custom(Color.Magenta, Color.Cyan),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Small,
+                    CustomIconStyle.Custom(Color.Magenta, Color.Cyan),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Small,
+                    CustomIconStyle.Custom(Color.Magenta, Color.Cyan),
+                    showShape = false
+                )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CustomIcons(
+                    CustomIconsSize.Large,
+                    CustomIconStyle.Neutral(),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Medium,
+                    CustomIconStyle.Neutral(),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Small,
+                    CustomIconStyle.Neutral(),
+                    showShape = true
+                )
+
+                CustomIcons(
+                    CustomIconsSize.Small,
+                    CustomIconStyle.Neutral(),
+                    showShape = false
+                )
+            }
+
+        }
+    }
 }
 
 @Composable
 fun CustomIcons(
     size: CustomIconsSize,
-    style: CustomIconsStyle,
+    style: CustomIconStyle,
     showShape: Boolean,
     icon: Painter = rememberVectorPainter(image = Icons.Filled.Add)
 ) {
+    val showShaped = if (style !is CustomIconStyle.Neutral) {
+        true
+    } else {
+        showShape
+    }
     Box(modifier = Modifier
-        .size(size.shapeSize)
-        .thenIf(showShape) {
-            clip(CircleShape).background(style.shapeColor)
+        .thenIf(showShaped) {
+            size(size.shapeSize)
+                .clip(CircleShape)
+                .background(style.shapeColor)
+                .padding(size.padding)
         }
-        .padding(size.padding)
     ) {
         Image(
             painter = icon,
