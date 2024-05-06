@@ -54,11 +54,12 @@ sealed class CustomIconStyle (val shapeColor: Color, val iconColor: Color) {
 
     class Info : CustomIconStyle(shapeColor = CustomIconsColor.LightCyan, iconColor = CustomIconsColor.DarkCyan)
 
-    class Neutral(val showShape: Boolean) : CustomIconStyle(shapeColor = Color.LightGray, iconColor = Color.DarkGray)
+    class Neutral(val showShape: Boolean = true) : CustomIconStyle(shapeColor = Color.LightGray, iconColor = Color.DarkGray)
 
     data class Custom (
         val shapedColor: Color = Color.LightGray,
-        val iconeColor: Color = Color.DarkGray
+        val iconeColor: Color = Color.DarkGray,
+        val showShape: Boolean = true
     ) : CustomIconStyle(shapeColor = shapedColor, iconColor = iconeColor)
 
 }
@@ -248,7 +249,7 @@ fun CustomIconsPreview() {
 
                 CustomIcons(
                     CustomIconsSize.Small,
-                    CustomIconStyle.Custom(Color.Magenta, Color.Cyan),
+                    CustomIconStyle.Custom(Color.Magenta, Color.Cyan, showShape = false),
                 )
             }
 
@@ -286,7 +287,12 @@ fun CustomIcons(
     style: CustomIconStyle,
     icon: Painter = rememberVectorPainter(image = Icons.Filled.CheckCircle)
 ) {
-    val showShaped = if (style is CustomIconStyle.Neutral) style.showShape else true
+    val showShaped = when(style) {
+        is CustomIconStyle.Custom -> style.showShape
+        is CustomIconStyle.Neutral -> style.showShape
+        else -> true
+    }
+    //val showShaped = if (style is CustomIconStyle.Neutral) style.showShape else true
 
     Box(modifier = Modifier
         .thenIf(showShaped) {
