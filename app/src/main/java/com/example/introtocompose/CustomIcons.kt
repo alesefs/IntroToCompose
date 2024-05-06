@@ -45,15 +45,15 @@ object CustomIconsColor {
 }*/
 
 sealed class CustomIconStyle (val shapeColor: Color, val iconColor: Color) {
-    class Success() : CustomIconStyle(shapeColor = CustomIconsColor.LightGreen, iconColor = CustomIconsColor.DarkGreen)
+    class Success : CustomIconStyle(shapeColor = CustomIconsColor.LightGreen, iconColor = CustomIconsColor.DarkGreen)
 
-    class Warning() : CustomIconStyle(shapeColor = CustomIconsColor.LightYellow, iconColor = CustomIconsColor.DarkYellow)
+    class Warning : CustomIconStyle(shapeColor = CustomIconsColor.LightYellow, iconColor = CustomIconsColor.DarkYellow)
 
-    class Error() : CustomIconStyle(shapeColor = CustomIconsColor.LightRed, iconColor = CustomIconsColor.DarkRed)
+    class Error : CustomIconStyle(shapeColor = CustomIconsColor.LightRed, iconColor = CustomIconsColor.DarkRed)
 
-    class Info() : CustomIconStyle(shapeColor = CustomIconsColor.LightCyan, iconColor = CustomIconsColor.DarkCyan)
+    class Info : CustomIconStyle(shapeColor = CustomIconsColor.LightCyan, iconColor = CustomIconsColor.DarkCyan)
 
-    class Neutral() : CustomIconStyle(shapeColor = Color.LightGray, iconColor = Color.DarkGray)
+    class Neutral : CustomIconStyle(shapeColor = Color.LightGray, iconColor = Color.DarkGray)
 
     data class Custom (
         val shapedColor: Color = Color.LightGray,
