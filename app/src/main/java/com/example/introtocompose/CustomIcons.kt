@@ -2,6 +2,7 @@ package com.example.introtocompose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -145,11 +146,10 @@ fun CustomIconsPreview() {
 @Composable
 fun CustomIconsPreview() {
     IntroToComposeTheme {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Column {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
             ) {
                 CustomIcons(
                     CustomIconsSize.Large,
@@ -173,7 +173,8 @@ fun CustomIconsPreview() {
             }
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
             ) {
                 CustomIcons(
                     CustomIconsSize.Large,
@@ -192,7 +193,8 @@ fun CustomIconsPreview() {
             }
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
             ) {
                 CustomIcons(
                     CustomIconsSize.Large,
@@ -211,7 +213,8 @@ fun CustomIconsPreview() {
             }
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
             ) {
                 CustomIcons(
                     CustomIconsSize.Large,
@@ -230,7 +233,8 @@ fun CustomIconsPreview() {
             }
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
             ) {
                 CustomIcons(
                     CustomIconsSize.Large,
@@ -254,7 +258,8 @@ fun CustomIconsPreview() {
             }
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
             ) {
                 CustomIcons(
                     CustomIconsSize.Large,
@@ -294,12 +299,12 @@ fun CustomIcons(
     }
     //val showShaped = if (style is CustomIconStyle.Neutral) style.showShape else true
 
-    Box(modifier = Modifier
+    /*Box(modifier = Modifier
         .thenIf(showShaped) {
-            padding(size.padding)
-            .size(size.shapeSize)
+            size(size.shapeSize)
             .clip(CircleShape)
             .background(style.shapeColor)
+            .padding(size.padding)
         }
     ) {
         Image(
@@ -310,5 +315,22 @@ fun CustomIcons(
                 .size(size.iconSize),
             colorFilter = ColorFilter.tint(style.iconColor, BlendMode.SrcIn)
         )
-    }
+    }*/
+
+    Image(
+        modifier = Modifier
+            .thenIf(showShaped) {
+                size(size.shapeSize)
+                .clip(CircleShape)
+                .background(style.shapeColor)
+                .padding(size.padding)
+                .size(size.iconSize)
+            }
+            .thenIf(!showShaped) {
+                size(size.iconSize)
+            },
+        painter = icon,
+        contentDescription = null,
+        colorFilter = ColorFilter.tint(style.iconColor, BlendMode.SrcIn)
+    )
 }
