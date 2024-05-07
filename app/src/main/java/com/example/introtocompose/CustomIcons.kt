@@ -46,22 +46,46 @@ object CustomIconsColor {
     Neutral(Color.LightGray, Color.DarkGray)
 }*/
 
-sealed class CustomIconStyle (val shapeColor: Color, val iconColor: Color) {
-    class Success : CustomIconStyle(shapeColor = CustomIconsColor.LightGreen, iconColor = CustomIconsColor.DarkGreen)
+sealed class CustomIconStyle(
+    val shapeColor: Color,
+    val iconColor: Color,
+    val showShape: Boolean = true
+) {
+    class Success : CustomIconStyle(
+        shapeColor = CustomIconsColor.LightGreen,
+        iconColor = CustomIconsColor.DarkGreen
+    )
 
-    class Warning : CustomIconStyle(shapeColor = CustomIconsColor.LightYellow, iconColor = CustomIconsColor.DarkYellow)
+    class Warning : CustomIconStyle(
+        shapeColor = CustomIconsColor.LightYellow,
+        iconColor = CustomIconsColor.DarkYellow
+    )
 
-    class Error : CustomIconStyle(shapeColor = CustomIconsColor.LightRed, iconColor = CustomIconsColor.DarkRed)
+    class Error : CustomIconStyle(
+        shapeColor = CustomIconsColor.LightRed,
+        iconColor = CustomIconsColor.DarkRed
+    )
 
-    class Info : CustomIconStyle(shapeColor = CustomIconsColor.LightCyan, iconColor = CustomIconsColor.DarkCyan)
+    class Info : CustomIconStyle(
+        shapeColor = CustomIconsColor.LightCyan,
+        iconColor = CustomIconsColor.DarkCyan
+    )
 
-    class Neutral(val showShape: Boolean = true) : CustomIconStyle(shapeColor = Color.LightGray, iconColor = Color.DarkGray)
+    class Neutral(val showNeutralShape: Boolean = true) : CustomIconStyle(
+        shapeColor = Color.LightGray,
+        iconColor = Color.DarkGray,
+        showShape = showNeutralShape
+    )
 
-    data class Custom (
+    data class Custom(
         val shapedColor: Color = Color.LightGray,
         val iconeColor: Color = Color.DarkGray,
-        val showShape: Boolean = true
-    ) : CustomIconStyle(shapeColor = shapedColor, iconColor = iconeColor)
+        val showCustomShape: Boolean = true
+    ) : CustomIconStyle(
+        shapeColor = shapedColor,
+        iconColor = iconeColor,
+        showShape = showCustomShape
+    )
 
 }
 
@@ -141,6 +165,44 @@ fun CustomIconsPreview() {
     }
 }*/
 
+@Preview(showBackground = true)
+@Composable
+fun CustomIconsPreview2() {
+    IntroToComposeTheme {
+        val data = listOf(
+            Triple(
+                CustomIconsSize.Large,
+                CustomIconStyle.Success(),
+                Icons.Filled.CheckCircle
+            ),
+            Triple(
+                CustomIconsSize.Medium,
+                CustomIconStyle.Success(),
+                Icons.Filled.CheckCircle
+            ),
+            Triple(
+                CustomIconsSize.Small,
+                CustomIconStyle.Success(),
+                Icons.Filled.CheckCircle
+            )
+        )
+
+        Column {
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                data.forEach { item ->
+                    val size = item.first
+                    val style = item.second
+                    val icon = rememberVectorPainter(image = item.third)
+
+                    CustomIcons(size = size, style = style, icon = icon)
+                }
+            }
+        }
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
@@ -253,7 +315,7 @@ fun CustomIconsPreview() {
 
                 CustomIcons(
                     CustomIconsSize.Small,
-                    CustomIconStyle.Custom(Color.Magenta, Color.Cyan, showShape = false),
+                    CustomIconStyle.Custom(Color.Magenta, Color.Cyan, showCustomShape = false),
                 )
             }
 
@@ -263,22 +325,22 @@ fun CustomIconsPreview() {
             ) {
                 CustomIcons(
                     CustomIconsSize.Large,
-                    CustomIconStyle.Neutral(showShape = true),
+                    CustomIconStyle.Neutral(showNeutralShape = true),
                 )
 
                 CustomIcons(
                     CustomIconsSize.Medium,
-                    CustomIconStyle.Neutral(showShape = true),
+                    CustomIconStyle.Neutral(showNeutralShape = true),
                 )
 
                 CustomIcons(
                     CustomIconsSize.Small,
-                    CustomIconStyle.Neutral(showShape = true),
+                    CustomIconStyle.Neutral(showNeutralShape = true),
                 )
 
                 CustomIcons(
                     CustomIconsSize.Small,
-                    CustomIconStyle.Neutral(showShape = false),
+                    CustomIconStyle.Neutral(showNeutralShape = false),
                 )
             }
 
@@ -292,11 +354,11 @@ fun CustomIcons(
     style: CustomIconStyle,
     icon: Painter = rememberVectorPainter(image = Icons.Filled.CheckCircle)
 ) {
-    val showShaped = when(style) {
+    /*val showShaped = when(style) {
         is CustomIconStyle.Custom -> style.showShape
         is CustomIconStyle.Neutral -> style.showShape
         else -> true
-    }
+    }*/
     //val showShaped = if (style is CustomIconStyle.Neutral) style.showShape else true
 
     /*Box(modifier = Modifier
@@ -319,11 +381,11 @@ fun CustomIcons(
 
     Image(
         modifier = Modifier
-            .thenIf(showShaped) {
+            .thenIf(style.showShape) {
                 size(size.shapeSize)
-                .clip(CircleShape)
-                .background(style.shapeColor)
-                .padding(size.padding)
+                    .clip(CircleShape)
+                    .background(style.shapeColor)
+                    .padding(size.padding)
             }
             .size(size.iconSize),
         painter = icon,
