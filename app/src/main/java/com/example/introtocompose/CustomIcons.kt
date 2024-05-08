@@ -86,7 +86,6 @@ sealed class CustomIconStyle(
         iconColor = iconeColor,
         showShape = showCustomShape
     )
-
 }
 
 enum class CustomIconsSize(val padding: Dp, val iconSize: Dp, val shapeSize: Dp) {
@@ -344,6 +343,42 @@ fun CustomIconsPreview() {
                 )
             }
 
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CustomIconPreview2() {
+    IntroToComposeTheme {
+
+        val allCasesStyles = listOf(
+            CustomIconStyle.Success(),
+            CustomIconStyle.Warning(),
+            CustomIconStyle.Error(),
+            CustomIconStyle.Info(),
+            CustomIconStyle.Neutral(showNeutralShape = true),
+            CustomIconStyle.Neutral(showNeutralShape = false),
+            CustomIconStyle.Custom(shapedColor = Color.Cyan, iconeColor = Color.Black, true),
+            CustomIconStyle.Custom(shapedColor = Color.Cyan, iconeColor = Color.Red, false),
+        )
+        
+        val allCasesSizes = listOf(
+            CustomIconsSize.Large,
+            CustomIconsSize.Medium,
+            CustomIconsSize.Small,
+        )
+        
+        Column {
+            allCasesStyles.forEach { style -> 
+                Column {
+                    Row {
+                        allCasesSizes.forEach { size ->
+                            CustomIcons(size = size, style = style)
+                        }
+                    }
+                }
+            }
         }
     }
 }

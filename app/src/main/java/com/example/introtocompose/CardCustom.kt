@@ -20,6 +20,14 @@ import com.example.introtocompose.utils.BorderValues
 import com.example.introtocompose.utils.CardCustomTypes
 import com.example.introtocompose.utils.ElevationValues
 
+class CustomCardRadius(
+    val radius: Dp,
+    val topStart: Boolean = true,
+    val topEnd: Boolean = true,
+    val bottomStart: Boolean = true,
+    val bottomEnd: Boolean = true,
+)
+
 object CardCustomDefaults {
     fun backgroundColor(
         type: CardCustomTypes,
