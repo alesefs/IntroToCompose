@@ -1,5 +1,6 @@
 package com.example.introtocompose
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -78,7 +82,9 @@ sealed class CustomFeedbackSize(
     val descriptionTextStyle: TextStyle,
     val textAlign: TextAlign
 ) {
-    class Large : CustomFeedbackSize(
+    class Large(
+        val showCard: Boolean = false
+    ) : CustomFeedbackSize(
         horizontalPadding = 16.dp,
         verticalPadding = 24.dp,
         iconPadding = 16.dp,
@@ -93,7 +99,9 @@ sealed class CustomFeedbackSize(
         textAlign = TextAlign.Center
     )
 
-    class Medium : CustomFeedbackSize(
+    class Medium(
+        val showCard: Boolean = false
+    ) : CustomFeedbackSize(
         horizontalPadding = 12.dp,
         verticalPadding = 16.dp,
         iconPadding = 16.dp,
@@ -108,7 +116,9 @@ sealed class CustomFeedbackSize(
         textAlign = TextAlign.Center
     )
 
-    class Small : CustomFeedbackSize(
+    class Small(
+        val showCard: Boolean = false
+    ) : CustomFeedbackSize(
         horizontalPadding = 16.dp,
         verticalPadding = 16.dp,
         iconPadding = 8.dp,
@@ -134,46 +144,119 @@ fun CustomFeedback(
     title: String,
     icon: ImageVector,
     size: CustomFeedbackSize,
-    type: CustomFeedbackStyle,
+    style: CustomFeedbackStyle,
     modifier: Modifier = Modifier,
     description: String? = null,
     action: CustomFeedbackAction? = null
 ) {
-    if (size !is CustomFeedbackSize.Small) {
-        Column(
-            modifier = modifier
-                .thenIf(size is CustomFeedbackSize.Large) {
-                    fillMaxWidth()
+    when (size) {
+        is CustomFeedbackSize.Large ->  {
+            if (size.showCard) {
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                    border = BorderStroke(1.dp, Color.Gray),
+                    elevation = CardDefaults.elevatedCardElevation(
+                        defaultElevation = 2.dp
+                    )
+                ) {
+                    FeedbackContentLargeMedium(modifier, size, icon, style, title, description, action)
                 }
-                .thenIf(size is CustomFeedbackSize.Medium) {
-                    width(328.dp)
+            } else {
+                FeedbackContentLargeMedium(modifier, size, icon, style, title, description, action)
+            }
+        }
+        is CustomFeedbackSize.Medium -> {
+            if (size.showCard) {
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                    border = BorderStroke(1.dp, Color.Gray),
+                    elevation = CardDefaults.elevatedCardElevation(
+                        defaultElevation = 2.dp
+                    )
+                ) {
+                    FeedbackContentLargeMedium(modifier, size, icon, style, title, description, action)
                 }
-                .padding(
-                    horizontal = size.horizontalPadding,
-                    vertical = size.verticalPadding
-                ),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            FeedbackIcon(icon, size, type)
-
-            FeedbackTextsAndActionContent(size, title, description, action)
+            } else {
+                FeedbackContentLargeMedium(modifier, size, icon, style, title, description, action)
+            }
         }
-    } else {
-        Row(
-            modifier = Modifier
-                .width(328.dp)
-                .padding(
-                    horizontal = size.horizontalPadding,
-                    vertical = size.verticalPadding
-                ),
-            verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.Start
-        ) {
-            FeedbackIcon(icon, size, type)
-
-            FeedbackTextsAndActionContent(size, title, description, action)
+        is CustomFeedbackSize.Small -> {
+            if (size.showCard) {
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                    border = BorderStroke(1.dp, Color.Gray),
+                    elevation = CardDefaults.elevatedCardElevation(
+                        defaultElevation = 2.dp
+                    )
+                ) {
+                    FeedbackContentSmall(size, icon, style, title, description, action)
+                }
+            } else {
+                FeedbackContentSmall(size, icon, style, title, description, action)
+            }
         }
+    }
+}
+
+@Composable
+private fun FeedbackContentSmall(
+    size: CustomFeedbackSize,
+    icon: ImageVector,
+    type: CustomFeedbackStyle,
+    title: String,
+    description: String?,
+    action: CustomFeedbackAction?
+) {
+    Row(
+        modifier = Modifier
+            .width(328.dp)
+            .padding(
+                horizontal = size.horizontalPadding,
+                vertical = size.verticalPadding
+            ),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        FeedbackIcon(icon, size, type)
+
+        FeedbackTextsAndActionContent(size, title, description, action)
+    }
+}
+
+@Composable
+private fun FeedbackContentLargeMedium(
+    modifier: Modifier,
+    size: CustomFeedbackSize,
+    icon: ImageVector,
+    type: CustomFeedbackStyle,
+    title: String,
+    description: String?,
+    action: CustomFeedbackAction?
+) {
+    Column(
+        modifier = modifier
+            .thenIf(size is CustomFeedbackSize.Large) {
+                fillMaxWidth()
+            }
+            .thenIf(size is CustomFeedbackSize.Medium) {
+                width(328.dp)
+            }
+            .padding(
+                horizontal = size.horizontalPadding,
+                vertical = size.verticalPadding
+            ),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        FeedbackIcon(icon, size, type)
+
+        FeedbackTextsAndActionContent(size, title, description, action)
     }
 }
 
@@ -278,7 +361,7 @@ fun CustomFeedbackPreview() {
                             title = "The quick brown fox jumps over",
                             icon = Icons.Filled.AccountCircle,
                             size = size,
-                            type = type,
+                            style = type,
                             description = "He lands head first on a rotting maple log.\n" +
                                     "Knocked unconscious, fox sleeps with shallow breath\n" +
                                     "until the lazy dog awakes.",
@@ -286,6 +369,40 @@ fun CustomFeedbackPreview() {
                         )
                     }
                 }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CustomFeedbackSuccessPreview() {
+    IntroToComposeTheme {
+        val allSizes = listOf(
+            CustomFeedbackSize.Large(),
+            CustomFeedbackSize.Large(true),
+            CustomFeedbackSize.Medium(),
+            CustomFeedbackSize.Medium(true),
+            CustomFeedbackSize.Small(),
+            CustomFeedbackSize.Small(true),
+        )
+
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            items(items = allSizes) { size ->
+                CustomFeedback(
+                    title = "The quick brown fox jumps over",
+                    icon = Icons.Filled.AccountCircle,
+                    size = size,
+                    style = CustomFeedbackStyle.Success(),
+                    description = "He lands head first on a rotting maple log.\n" +
+                            "Knocked unconscious, fox sleeps with shallow breath\n" +
+                            "until the lazy dog awakes.",
+                    action = CustomFeedbackAction("Click!") {}
+                )
+
+                Spacer(modifier = Modifier.padding(vertical = 8.dp))
             }
         }
     }
