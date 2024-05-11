@@ -53,37 +53,37 @@ sealed class CustomCardStyle(
     val elevationValue: Dp = 0.dp
 ) {
     class Base(
-        cardRadiusBase: CustomCardCornerRadius,
+        cardRadius: CustomCardCornerRadius,
     ) : CustomCardStyle(
         backgroundColor = Color.White,
-        cardRadius = cardRadiusBase
+        cardRadius = cardRadius
     )
 
     class Stroke(
         backgroundColor: Color? = null,
-        cardRadiusStroke: CustomCardCornerRadius,
+        cardRadius: CustomCardCornerRadius,
         strokeStyle: CustomCardStroke
     ) : CustomCardStyle(
         backgroundColor = backgroundColor ?: Color.White,
-        cardRadius = cardRadiusStroke,
+        cardRadius = cardRadius,
         strokeStyle = strokeStyle
     )
 
     class Elevation(
         backgroundColor: Color? = null,
-        cardRadiusElevation: CustomCardCornerRadius,
+        cardRadius: CustomCardCornerRadius,
         elevationValue: Dp
     ) : CustomCardStyle(
         backgroundColor = backgroundColor ?: Color.White,
-        cardRadius = cardRadiusElevation,
+        cardRadius = cardRadius,
         elevationValue = elevationValue
     )
 
     class Emphasis(
-        cardRadiusEmphasis: CustomCardCornerRadius,
+        cardRadius: CustomCardCornerRadius,
     ) : CustomCardStyle(
         backgroundColor = Color.Gray,
-        cardRadius = cardRadiusEmphasis
+        cardRadius = cardRadius
     )
 
 }
@@ -191,7 +191,7 @@ fun CustomCardAllCasesPreview() {
 
         val allCasesCardStyles = listOf(
             CustomCardStyle.Base(
-                cardRadiusBase = CustomCardCornerRadius(
+                cardRadius = CustomCardCornerRadius(
                     radius = 16.dp,
                     topStart = true,
                     topEnd = true,
@@ -201,7 +201,7 @@ fun CustomCardAllCasesPreview() {
             ),
             CustomCardStyle.Stroke(
                 backgroundColor = Color.LightGray,
-                cardRadiusStroke = CustomCardCornerRadius(
+                cardRadius = CustomCardCornerRadius(
                     radius = 16.dp,
                     topStart = true,
                     topEnd = true,
@@ -212,7 +212,7 @@ fun CustomCardAllCasesPreview() {
             ),
             CustomCardStyle.Elevation(
                 backgroundColor = Color.White,
-                cardRadiusElevation = CustomCardCornerRadius(
+                cardRadius = CustomCardCornerRadius(
                     radius = 16.dp,
                     topStart = true,
                     topEnd = true,
@@ -222,7 +222,7 @@ fun CustomCardAllCasesPreview() {
                 elevationValue = 2.dp
             ),
             CustomCardStyle.Emphasis(
-                cardRadiusEmphasis = CustomCardCornerRadius(
+                cardRadius = CustomCardCornerRadius(
                     radius = 16.dp,
                     topStart = true,
                     topEnd = true,
