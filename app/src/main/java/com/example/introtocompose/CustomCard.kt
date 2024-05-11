@@ -60,21 +60,21 @@ sealed class CustomCardStyle(
     )
 
     class Stroke(
-        backgroundColor: Color? = null,
+        backgroundColor: Color = Color.White,
         cardRadius: CustomCardCornerRadius,
         strokeStyle: CustomCardStroke
     ) : CustomCardStyle(
-        backgroundColor = backgroundColor ?: Color.White,
+        backgroundColor = backgroundColor,
         cardRadius = cardRadius,
         strokeStyle = strokeStyle
     )
 
     class Elevation(
-        backgroundColor: Color? = null,
+        backgroundColor: Color = Color.White,
         cardRadius: CustomCardCornerRadius,
         elevationValue: Dp
     ) : CustomCardStyle(
-        backgroundColor = backgroundColor ?: Color.White,
+        backgroundColor = backgroundColor,
         cardRadius = cardRadius,
         elevationValue = elevationValue
     )
