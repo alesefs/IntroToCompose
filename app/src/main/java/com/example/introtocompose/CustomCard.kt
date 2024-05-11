@@ -145,39 +145,43 @@ fun CustomCard(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun CustomCardPreview() {
     IntroToComposeTheme {
-        CustomCard(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp),
-            style = CustomCardStyle.Stroke(
-                Color.LightGray,
-                CustomCardCornerRadius(
-                    radius = 16.dp,
-                    topStart = true,
-                    topEnd = true,
-                    bottomStart = true,
-                    bottomEnd = true
-                ),
-                CustomCardStroke(2.dp, Color.Red)
-            ),
-            decorated = CustomCardDecoration(size = 12.dp, color = Color.Green),
+        Box(
+            modifier = Modifier.fillMaxWidth().height(210.dp)
         ) {
-            Column(
+            CustomCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .height(200.dp),
+                style = CustomCardStyle.Elevation(
+                    Color.LightGray,
+                    CustomCardCornerRadius(
+                        radius = 16.dp,
+                        topStart = true,
+                        topEnd = true,
+                        bottomStart = true,
+                        bottomEnd = true
+                    ),
+                    elevationValue = 2.dp
+                ),
+                decorated = CustomCardDecoration(size = 12.dp, color = Color.Green),
             ) {
-                Text(
-                    text = "NewmanHaas ATCKS",
-                    color = Color.Red,
-                    textAlign = TextAlign.Center
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "NewmanHaas ATCKS",
+                        color = Color.Red,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }
