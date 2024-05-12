@@ -82,7 +82,7 @@ sealed class CustomCardStyle(
     class Emphasis(
         cardRadius: CustomCardCornerRadius,
     ) : CustomCardStyle(
-        backgroundColor = Color.Gray,
+        backgroundColor = Color.LightGray,
         cardRadius = cardRadius
     )
 
@@ -200,7 +200,7 @@ fun CustomCardAllCasesPreview() {
                 )
             ),
             CustomCardStyle.Stroke(
-                backgroundColor = Color.LightGray,
+                backgroundColor = Color.Yellow,
                 cardRadius = CustomCardCornerRadius(
                     radius = 16.dp,
                     topStart = true,
