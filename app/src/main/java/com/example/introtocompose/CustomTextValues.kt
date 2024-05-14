@@ -106,9 +106,7 @@ fun CustomTextValuesPreviewList() {
         Triple(CustomTextValuesStyle.Colors, "-R$ 100,70", false),
     )
 
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth()
-    ) {
+    LazyColumn {
         items(items = allCasesStyleValues) { values ->
             CustomTextValues(
                 value = values.second,

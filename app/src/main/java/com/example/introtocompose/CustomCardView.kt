@@ -461,6 +461,8 @@ fun CustomCardViewFooter(
         )
 
         action?.let {
+            Spacer(modifier = Modifier.size(8.dp))
+
             CustomAction(
                 style = CustomActionStyle.Text(
                     actionText = action.actionText,
