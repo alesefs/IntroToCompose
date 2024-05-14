@@ -380,16 +380,10 @@ fun CustomCardViewContent(
             monetaryValue?.let {
                 Spacer(modifier = Modifier.size(8.dp))
 
-                Text(//TODO: REFAZER MONETARY PARA STRING
-                    modifier = Modifier.fillMaxWidth(),
-                    text = monetaryValue,
-                    color = Color.Black,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = TextStyle(
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                CustomTextValues(
+                    value = monetaryValue,
+                    style = CustomTextValuesStyle.Dark,
+                    showValue = true
                 )
             }
         }

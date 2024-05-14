@@ -68,6 +68,7 @@ fun CustomTextValues(
 
     Text(
         text = if (showValue) value else "$currencyHidden ******",
+        maxLines = 1,
         style = TextStyle(
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
