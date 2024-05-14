@@ -10,8 +10,11 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.introtocompose.utils.thenIf
 
 @Preview(showBackground = true)
@@ -58,7 +61,7 @@ fun CustomTextPillPreview() {
     */
 }
 
-sealed class CustomTextPillStyle (
+sealed class CustomTextPillStyle(
     val backgroundColor: Color,
     val textColor: Color,
 ) {
@@ -131,8 +134,12 @@ fun CustomTextPill(
                 }
             }
             .padding(horizontal = 8.dp),
-                text = text,
-                maxLines = 1,
-                color = if (isFilled) style.textColor else style.backgroundColor
-                )
-            }
+        text = text,
+        maxLines = 1,
+        color = if (isFilled) style.textColor else style.backgroundColor,
+        style = TextStyle(
+            fontSize = 14.sp,
+            fontWeight = FontWeight.W500
+        )
+    )
+}
