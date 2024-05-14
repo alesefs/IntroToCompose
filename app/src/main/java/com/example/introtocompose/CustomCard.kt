@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -31,6 +32,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.example.introtocompose.ui.theme.IntroToComposeTheme
 
 data class CustomCardCornerRadius(
@@ -100,14 +103,14 @@ fun CustomCard(
     decorated: CustomCardDecoration? = null,
     content: @Composable () -> Unit
 ) {
-    var heightIs by remember { mutableStateOf(0.dp) }
-    val currentDensity = LocalDensity.current
+//    var heightIs by remember { mutableStateOf(0.dp) }
+//    val currentDensity = LocalDensity.current
 
     Box(modifier = modifier) {
         Card(
-            modifier = Modifier.onGloballyPositioned { coordinates ->
-                heightIs = with(currentDensity) { coordinates.size.height.toDp() }
-            },
+//            modifier = Modifier.onGloballyPositioned { coordinates ->
+//                heightIs = with(currentDensity) { coordinates.size.height.toDp() }
+//            },
             colors = CardDefaults.cardColors(
                 containerColor = style.backgroundColor
             ),
@@ -126,7 +129,7 @@ fun CustomCard(
                 BorderStroke(this?.size ?: 0.dp, this?.color ?: Color.Transparent)
             }
         ) {
-            Row {
+            /*Row {
                 decorated?.let {
                     Box(
                         modifier = Modifier
@@ -147,6 +150,49 @@ fun CustomCard(
                 }
 
                 content.invoke()
+            }*/
+
+            ConstraintLayout(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                val (decorateRef, contentRef) = createRefs()
+                val guidelineStartContent = createGuidelineFromStart(decorated?.size ?: 0.dp)
+
+                decorated?.let {
+                    Box(
+                        modifier = Modifier
+                            .background(decorated.color)
+                            .constrainAs(decorateRef) {
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                                start.linkTo(parent.start)
+                                end.linkTo(guidelineStartContent)
+                                width = Dimension.value(decorated.size)
+                                height = Dimension.fillToConstraints
+                            }
+                            .clip(
+                                shape = with(style.cardRadius) {
+                                    RoundedCornerShape(
+                                        topStart = if (topStart) radius else 0.dp,
+                                        topEnd = 0.dp,
+                                        bottomStart = if (bottomStart) radius else 0.dp,
+                                        bottomEnd = 0.dp,
+                                    )
+                                }
+                            ),
+                    )
+                }
+
+                Box(
+                    modifier = Modifier.constrainAs(contentRef) {
+                        top.linkTo(parent.top)
+                        start.linkTo(decorateRef.end)
+                        end.linkTo(parent.end)
+                        width = Dimension.fillToConstraints
+                    }
+                ) {
+                    content.invoke()
+                }
             }
         }
     }
