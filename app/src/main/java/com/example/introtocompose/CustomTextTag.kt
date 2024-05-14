@@ -90,7 +90,7 @@ fun CustomTextTag2(
 
 @Preview
 @Composable
-fun CustomTextPreview() {
+fun CustomTextTagPreview() {
     IntroToComposeTheme {
         Column {
             CustomTextTag1(

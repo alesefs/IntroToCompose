@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -18,10 +17,16 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -95,9 +100,14 @@ fun CustomCard(
     decorated: CustomCardDecoration? = null,
     content: @Composable () -> Unit
 ) {
+    var heightIs by remember { mutableStateOf(0.dp) }
+    val currentDensity = LocalDensity.current
+
     Box(modifier = modifier) {
         Card(
-            modifier = Modifier,
+            modifier = Modifier.onGloballyPositioned { coordinates ->
+                heightIs = with(currentDensity) { coordinates.size.height.toDp() }
+            },
             colors = CardDefaults.cardColors(
                 containerColor = style.backgroundColor
             ),
@@ -116,13 +126,13 @@ fun CustomCard(
                 BorderStroke(this?.size ?: 0.dp, this?.color ?: Color.Transparent)
             }
         ) {
-            Row (modifier = Modifier.fillMaxSize()) {
+            Row {
                 decorated?.let {
                     Box(
                         modifier = Modifier
-                            .width(decorated.size)
-                            .fillMaxHeight()
                             .background(decorated.color)
+                            .width(decorated.size)
+                            .height(heightIs)
                             .clip(
                                 shape = with(style.cardRadius) {
                                     RoundedCornerShape(
@@ -147,12 +157,11 @@ fun CustomCard(
 fun CustomCardPreview() {
     IntroToComposeTheme {
         Box(
-            modifier = Modifier.fillMaxWidth().height(210.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(210.dp)
         ) {
             CustomCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
                 style = CustomCardStyle.Elevation(
                     Color.LightGray,
                     CustomCardCornerRadius(
@@ -164,7 +173,10 @@ fun CustomCardPreview() {
                     ),
                     elevationValue = 2.dp
                 ),
-                decorated = CustomCardDecoration(size = 12.dp, color = Color.Green),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                decorated = CustomCardDecoration(size = 12.dp, color = Color.Green)
             ) {
                 Column(
                     modifier = Modifier
@@ -235,10 +247,11 @@ fun CustomCardAllCasesPreview() {
         Column {
             allCasesCardStyles.forEach { style ->
                 CustomCard(
+                    style = style,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp),
-                    style = style
+                    decorated = CustomCardDecoration(8.dp, Color.Magenta)
                 ) {
                     Column(
                         modifier = Modifier

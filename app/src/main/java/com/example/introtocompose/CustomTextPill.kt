@@ -97,6 +97,12 @@ sealed class CustomTextPillStyle (
 
 }
 
+data class CustomTextPillModel(
+    val text: String,
+    val isFilled: Boolean,
+    val style: CustomTextPillStyle
+)
+
 @Composable
 fun CustomTextPill(
     text: String,

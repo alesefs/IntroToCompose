@@ -387,6 +387,7 @@ fun CustomIconPreview2() {
 fun CustomIcons(
     size: CustomIconsSize,
     style: CustomIconStyle,
+    modifier: Modifier = Modifier,
     icon: Painter = rememberVectorPainter(image = Icons.Filled.CheckCircle)
 ) {
     /*val showShaped = when(style) {
@@ -414,17 +415,19 @@ fun CustomIcons(
         )
     }*/
 
-    Image(
-        modifier = Modifier
-            .thenIf(style.showShape) {
-                size(size.shapeSize)
-                    .clip(CircleShape)
-                    .background(style.shapeColor)
-                    .padding(size.padding)
-            }
-            .size(size.iconSize),
-        painter = icon,
-        contentDescription = null,
-        colorFilter = ColorFilter.tint(style.iconColor, BlendMode.SrcIn)
-    )
+    Box(modifier = modifier) {
+        Image(
+            modifier = Modifier
+                .thenIf(style.showShape) {
+                    size(size.shapeSize)
+                        .clip(CircleShape)
+                        .background(style.shapeColor)
+                        .padding(size.padding)
+                }
+                .size(size.iconSize),
+            painter = icon,
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(style.iconColor, BlendMode.SrcIn)
+        )
+    }
 }
