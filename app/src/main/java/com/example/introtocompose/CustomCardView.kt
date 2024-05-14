@@ -380,7 +380,7 @@ fun CustomCardViewContent(
             monetaryValue?.let {
                 Spacer(modifier = Modifier.size(8.dp))
 
-                Text(
+                Text(//TODO: REFAZER MONETARY PARA STRING
                     modifier = Modifier.fillMaxWidth(),
                     text = monetaryValue,
                     color = Color.Black,
