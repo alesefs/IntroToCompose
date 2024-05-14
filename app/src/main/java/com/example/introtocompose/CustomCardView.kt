@@ -5,12 +5,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -27,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +39,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import java.util.Locale
 
 /*enum class CustomCardViewStyle(val showDecorate: Boolean) {
@@ -73,24 +80,17 @@ object CustomCardView {
 
 @Composable
 fun CustomCardView(
-    style: CustomCardViewStyle = CustomCardViewStyle.Decorate(),
-    customCardStyle: CustomCardStyle = CustomCardStyle.Base(
-        cardRadius = CustomCardCornerRadius(
-            radius = 16.dp,
-            topStart = true,
-            topEnd = true,
-            bottomStart = true,
-            bottomEnd = true
-        )
-    ),
+    style: CustomCardViewStyle,
+    customCardStyle: CustomCardStyle,
+    modifier: Modifier = Modifier,
+    contentHeader: @Composable (() -> CustomCardView.Header)? = null,
+    contentCenter: @Composable (() -> CustomCardView.Center)? = null,
+    contentFooter: @Composable (() -> CustomCardView.Footer)? = null,
 //    contentHeader: @Composable() (() -> Unit)? = { CustomCardViewHeader() },
 //    contentCenter: @Composable (() -> Unit)? = { CustomCardViewContent() },
 //    contentFooter: @Composable (() -> Unit)? = { CustomCardViewFooter() },
-    contentHeader: @Composable (() -> CustomCardView.Header)? = { CustomCardView.Header.simple() },
-    contentCenter: @Composable (() -> CustomCardView.Center)? = { CustomCardView.Center.simple() },
-    contentFooter: @Composable (() -> CustomCardView.Footer)? = { CustomCardView.Footer.simple() },
-    ) {
-    Box {
+) {
+    Box(modifier = modifier) {
         CustomCard(
             modifier = Modifier.wrapContentSize(),
             style = customCardStyle,
@@ -112,9 +112,12 @@ fun CustomCardView(
                     ) {
                         contentHeader?.invoke()
                         Image(
-                            modifier = Modifier.size(200.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp),
                             painter = painterResource(R.drawable.ic_launcher_background),
-                            contentDescription = null
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop
                         )
                         contentCenter?.invoke()
                         contentFooter?.invoke()
@@ -122,20 +125,82 @@ fun CustomCardView(
                 }
 
                 is CustomCardViewStyle.HorizontalImage -> {
+                    /*
                     Row(
-                        modifier = Modifier.fillMaxSize(),
                         horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.Top
                     ) {
                         Image(
                             modifier = Modifier.size(120.dp),
                             painter = painterResource(R.drawable.ic_launcher_background),
-                            contentDescription = null
+                            contentDescription = null,
+                            contentScale = ContentScale.Fit
                         )
+
                         Column {
                             contentHeader?.invoke()
                             contentCenter?.invoke()
                             contentFooter?.invoke()
+                        }
+                    }
+                    */
+
+                    ConstraintLayout(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        val (headerRef, centerRef, footerRef, imageRef) = createRefs()
+                        val guidelineStartContent = createGuidelineFromStart(120.dp)
+                        Image(
+                            modifier = Modifier.constrainAs(imageRef) {
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                                start.linkTo(parent.start)
+                                end.linkTo(guidelineStartContent)
+                                width = Dimension.fillToConstraints
+                                height = Dimension.fillToConstraints
+                            },
+                            painter = painterResource(R.drawable.ic_launcher_background),
+                            contentDescription = null,
+                            contentScale = ContentScale.FillBounds
+                        )
+
+                        contentHeader?.let {
+                            Box(
+                                modifier = Modifier.constrainAs(headerRef) {
+                                    top.linkTo(parent.top)
+                                    start.linkTo(imageRef.end)
+                                    end.linkTo(parent.end)
+                                    width = Dimension.fillToConstraints
+                                }
+                            ) {
+                                contentHeader.invoke()
+                            }
+                        }
+
+                        contentCenter?.let {
+                            Box(
+                                modifier = Modifier.constrainAs(centerRef) {
+                                    top.linkTo(headerRef.bottom)
+                                    start.linkTo(imageRef.end)
+                                    end.linkTo(parent.end)
+                                    width = Dimension.fillToConstraints
+                                }
+                            ) {
+                                contentCenter.invoke()
+                            }
+                        }
+
+                        contentFooter?.let {
+                            Box(
+                                modifier = Modifier.constrainAs(footerRef) {
+                                    top.linkTo(centerRef.bottom)
+                                    start.linkTo(imageRef.end)
+                                    end.linkTo(parent.end)
+                                    width = Dimension.fillToConstraints
+                                }
+                            ) {
+                                contentFooter.invoke()
+                            }
                         }
                     }
                 }
@@ -160,6 +225,60 @@ fun CustomCardViewPreview1() {
         items(items = allCasesStyles) { style ->
             CustomCardView(
                 style = style,
+                customCardStyle = CustomCardStyle.Base(
+                    cardRadius = CustomCardCornerRadius(
+                        radius = 16.dp,
+                        topStart = true,
+                        topEnd = true,
+                        bottomStart = true,
+                        bottomEnd = true
+                    )
+                ),
+                contentHeader = {
+                    CustomCardView.Header.description(
+                        title = "Lorem ipsum dolor sit amet",
+                        icon = rememberVectorPainter(image = Icons.Filled.CheckCircle),
+                        action = CustomActionStyle.Icon(
+                            actionIcon = rememberVectorPainter(image = Icons.Filled.MoreVert),
+                            action = { Log.d("ALELOG", "CustomCardViewHeader: click!") }
+                        ),
+                        description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                                "Suspendisse in neque maximus, tempus lectus in, maximus odio. " +
+                                "Etiam blandit diam at metus semper rutrum. Integer cursus mauris vel neque elementum vehicula. "
+                    )
+                },
+                contentCenter = {
+                    CustomCardView.Center.simple(
+                        title = "Lorem ipsum dolor sit amet, Nullam lorem eros, pretium eu dui sit amet, elementum sagittis justo.  In consectetur nec nunc nec tristique",
+                        pillList = textPillList,
+                        overLine = "Lorem ipsum dolor sit amet",
+                        description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                                "Suspendisse in neque maximus, tempus lectus in, maximus odio. " +
+                                "Etiam blandit diam at metus semper rutrum. Integer cursus mauris vel neque elementum vehicula.",
+                        monetaryValue = "R$ 100,70",
+                        action = CustomActionStyle.Icon(
+                            actionIcon = rememberVectorPainter(image = Icons.AutoMirrored.Default.ArrowForward),
+                            action = { Log.d("ALELOG", "CustomCardViewHeader: click!") }
+                        ),
+                        actionAlignment = Alignment.CenterVertically
+                    )
+                },
+                contentFooter = {
+                    CustomCardView.Footer.simple(
+                        caption = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                                "Suspendisse in neque maximus, tempus lectus in, maximus odio. " +
+                                "Etiam blandit diam at metus semper rutrum. Integer cursus mauris vel neque elementum vehicula.",
+                        action = CustomActionStyle.Text(
+                            actionText = "text",
+                            style = TextStyle(
+                                color = Color.Red,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp
+                            ),
+                            action = {}
+                        )
+                    )
+                }
             )
             Spacer(modifier = Modifier.size(8.dp))
         }
@@ -168,13 +287,10 @@ fun CustomCardViewPreview1() {
 }
 
 @Composable
-fun CustomCardView.Header.simple(
-    icon: Painter? = rememberVectorPainter(image = Icons.Filled.CheckCircle),
-    title: String = "Lorem ipsum dolor sit amet",
-    action: CustomActionStyle? = CustomActionStyle.Icon(
-        actionIcon = rememberVectorPainter(image = Icons.Filled.MoreVert),
-        action = { Log.d("ALELOG", "CustomCardViewHeader: click!") }
-    )
+fun CustomCardView.Header.title(
+    title: String,
+    icon: Painter? = null,
+    action: CustomActionStyle? = null,
 ): CustomCardView.Header {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -239,26 +355,23 @@ fun CustomCardView.Header.simple(
 @Preview(showBackground = true)
 @Composable
 fun CustomCardViewHeaderSimplePreview() {
-    CustomCardView.Header.simple()
+    CustomCardView.Header.title(
+        title = "Lorem ipsum dolor sit amet",
+        icon = rememberVectorPainter(image = Icons.Filled.CheckCircle),
+        action = CustomActionStyle.Icon(
+            actionIcon = rememberVectorPainter(image = Icons.Filled.MoreVert),
+            action = { Log.d("ALELOG", "CustomCardViewHeader: click!") }
+        )
+    )
 }
 
 @Composable
-fun CustomCardViewHeader(
-    icon: Painter? = rememberVectorPainter(image = Icons.Filled.CheckCircle),
-    title: String = "Lorem ipsum dolor sit amet, Nullam lorem eros, pretium eu dui sit amet, elementum sagittis justo.  In consectetur nec nunc nec tristique",
-    action: CustomActionStyle? = CustomActionStyle.Icon(
-        actionIcon = rememberVectorPainter(image = Icons.Filled.MoreVert),
-        action = { Log.d("ALELOG", "CustomCardViewHeader: click!") }
-    ),
-    description: String? = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-            "Suspendisse in neque maximus, tempus lectus in, maximus odio. " +
-            "Etiam blandit diam at metus semper rutrum. Integer cursus mauris vel neque elementum vehicula. " +
-            "Nunc pretium sollicitudin consequat. Duis in ante mattis, rutrum enim ac, " +
-            "commodo sem. Nunc et justo a lacus posuere posuere vitae in enim. Proin condimentum fermentum augue," +
-            " et pretium ante dictum et. Morbi tincidunt nibh quis nisi feugiat, a consectetur dolor venenatis. " +
-            "Nullam lorem eros, pretium eu dui sit amet, elementum sagittis justo. " +
-            "In consectetur nec nunc nec tristique."
-) {
+fun CustomCardView.Header.description(
+    title: String,
+    description: String,
+    icon: Painter? = null,
+    action: CustomActionStyle? = null
+): CustomCardView.Header {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -325,7 +438,7 @@ fun CustomCardViewHeader(
 
         }
 
-        description?.let {
+        description.let {
             Spacer(modifier = Modifier.size(8.dp))
 
             Text(
@@ -343,12 +456,29 @@ fun CustomCardViewHeader(
         }
 
     }
+
+    return this
 }
 
 @Preview(showBackground = true)
 @Composable
-fun CustomCardViewHeaderPreview() {
-    CustomCardViewHeader()
+fun CustomCardViewHeaderDescriptionPreview() {
+    CustomCardView.Header.description(
+        title = "Lorem ipsum dolor sit amet, Nullam lorem eros, pretium eu dui sit amet, elementum sagittis justo.  In consectetur nec nunc nec tristique",
+        icon = rememberVectorPainter(image = Icons.Filled.CheckCircle),
+        action = CustomActionStyle.Icon(
+            actionIcon = rememberVectorPainter(image = Icons.Filled.MoreVert),
+            action = { Log.d("ALELOG", "CustomCardViewHeader: click!") }
+        ),
+        description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                "Suspendisse in neque maximus, tempus lectus in, maximus odio. " +
+                "Etiam blandit diam at metus semper rutrum. Integer cursus mauris vel neque elementum vehicula. " +
+                "Nunc pretium sollicitudin consequat. Duis in ante mattis, rutrum enim ac, " +
+                "commodo sem. Nunc et justo a lacus posuere posuere vitae in enim. Proin condimentum fermentum augue," +
+                " et pretium ante dictum et. Morbi tincidunt nibh quis nisi feugiat, a consectetur dolor venenatis. " +
+                "Nullam lorem eros, pretium eu dui sit amet, elementum sagittis justo. " +
+                "In consectetur nec nunc nec tristique."
+    )
 }
 
 val textPillList = listOf(
@@ -381,24 +511,14 @@ val textPillList = listOf(
 
 @Composable
 fun CustomCardView.Center.simple(
-    pillList: List<CustomTextPillModel>? = textPillList,
-    overLine: String? = "Lorem ipsum dolor sit amet",
-    title: String = "Lorem ipsum dolor sit amet, Nullam lorem eros, pretium eu dui sit amet, elementum sagittis justo.  In consectetur nec nunc nec tristique",
-    description: String? = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-            "Suspendisse in neque maximus, tempus lectus in, maximus odio. " +
-            "Etiam blandit diam at metus semper rutrum. Integer cursus mauris vel neque elementum vehicula. " +
-            "Nunc pretium sollicitudin consequat. Duis in ante mattis, rutrum enim ac, " +
-            "commodo sem. Nunc et justo a lacus posuere posuere vitae in enim. Proin condimentum fermentum augue," +
-            " et pretium ante dictum et. Morbi tincidunt nibh quis nisi feugiat, a consectetur dolor venenatis. " +
-            "Nullam lorem eros, pretium eu dui sit amet, elementum sagittis justo. " +
-            "In consectetur nec nunc nec tristique.",
-    monetaryValue: String? = "R$ 100,70",
-    action: CustomActionStyle? = CustomActionStyle.Icon(
-        actionIcon = rememberVectorPainter(image = Icons.AutoMirrored.Default.ArrowForward),
-        action = { Log.d("ALELOG", "CustomCardViewHeader: click!") }
-    ),
-    actionAlignment: Alignment.Vertical = Alignment.CenterVertically
-) : CustomCardView.Center {
+    title: String,
+    pillList: List<CustomTextPillModel>? = emptyList(),
+    overLine: String? = null,
+    description: String? = null,
+    monetaryValue: String? = null,
+    action: CustomActionStyle? = null,
+    actionAlignment: Alignment.Vertical? = null
+): CustomCardView.Center {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -410,19 +530,10 @@ fun CustomCardView.Center.simple(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start
         ) {
-            //Pill
             pillList?.let {
                 LazyRow(
                     modifier = Modifier
                 ) {
-                    /*items(5) {
-                        CustomTextPill(
-                            text = "texto $it",
-                            isFilled = true,
-                            style = CustomTextPillStyle.Neutral()
-                        )
-                    }*/
-
                     items(pillList) { pill ->
                         CustomTextPill(
                             text = pill.text,
@@ -490,7 +601,10 @@ fun CustomCardView.Center.simple(
         action?.let {
             Spacer(modifier = Modifier.size(8.dp))
 
-            Box(modifier = Modifier.align(actionAlignment)) {
+            Box(
+                modifier = Modifier
+                    .align(actionAlignment ?: Alignment.CenterVertically)
+            ) {
                 when (action) {
                     is CustomActionStyle.Icon -> {
                         CustomAction(
@@ -523,20 +637,27 @@ fun CustomCardView.Center.simple(
 @Preview(showBackground = true)
 @Composable
 fun CustomCardViewContentPreview() {
-    CustomCardView.Center.simple()
+    CustomCardView.Center.simple(
+        title = "Lorem ipsum dolor sit amet, Nullam lorem eros, pretium eu dui sit amet, elementum sagittis justo.  In consectetur nec nunc nec tristique",
+        pillList = textPillList,
+        overLine = "Lorem ipsum dolor sit amet",
+        description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                "Suspendisse in neque maximus, tempus lectus in, maximus odio. " +
+                "Etiam blandit diam at metus semper rutrum. Integer cursus mauris vel neque elementum vehicula.",
+        monetaryValue = "R$ 100,70",
+        action = CustomActionStyle.Icon(
+            actionIcon = rememberVectorPainter(image = Icons.AutoMirrored.Default.ArrowForward),
+            action = { Log.d("ALELOG", "CustomCardViewHeader: click!") }
+        ),
+        actionAlignment = Alignment.CenterVertically
+    )
 }
 
 @Composable
 fun CustomCardView.Footer.simple(
-    caption: String = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-            "Suspendisse in neque maximus, tempus lectus in, maximus odio. " +
-            "Etiam blandit diam at metus semper rutrum. Integer cursus mauris vel neque elementum vehicula.",
-    action: CustomActionStyle.Text? = CustomActionStyle.Text(
-        actionText = "text",
-        style = TextStyle(color = Color.Red, fontWeight = FontWeight.SemiBold, fontSize = 16.sp),
-        action = {}
-    )
-) : CustomCardView.Footer {
+    caption: String,
+    action: CustomActionStyle.Text? = null
+): CustomCardView.Footer {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -582,5 +703,18 @@ fun CustomCardView.Footer.simple(
 @Preview(showBackground = true)
 @Composable
 fun CustomCardViewFooterPreview() {
-    CustomCardView.Footer.simple()
+    CustomCardView.Footer.simple(
+        caption = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                "Suspendisse in neque maximus, tempus lectus in, maximus odio. " +
+                "Etiam blandit diam at metus semper rutrum. Integer cursus mauris vel neque elementum vehicula.",
+        action = CustomActionStyle.Text(
+            actionText = "text",
+            style = TextStyle(
+                color = Color.Red,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp
+            ),
+            action = {}
+        )
+    )
 }
