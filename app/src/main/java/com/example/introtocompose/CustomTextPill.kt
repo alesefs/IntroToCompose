@@ -81,12 +81,12 @@ sealed class CustomTextPillStyle(
     )
 
     class Info : CustomTextPillStyle(
-        backgroundColor = Color.Blue,
-        textColor = Color.Black,
+        backgroundColor = Colors.LightBlue,
+        textColor = Color.White,
     )
 
     class Neutral : CustomTextPillStyle(
-        backgroundColor = Color.Gray,
+        backgroundColor = Color.LightGray,
         textColor = Color.Black,
     )
 

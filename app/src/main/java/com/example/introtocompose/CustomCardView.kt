@@ -70,6 +70,7 @@ object Colors {
     val TealUlong = Color(0xFF00DCDC)
     val Petroleum = Color(red = 0, green = 80, blue = 80)
     val PetroleumUlong = Color(0xFF005050)
+    val LightBlue = Color(0xFF005599)
 }
 
 object CustomCardView {
