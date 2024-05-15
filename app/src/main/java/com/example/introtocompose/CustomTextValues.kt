@@ -1,7 +1,6 @@
 package com.example.introtocompose
 
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -39,7 +38,7 @@ fun CustomTextValues(
         .replace(",", ".")
         .toDouble()
 
-    val colorsToValue: Color = if (style == CustomTextValuesStyle.Colors) {
+    val colorToValue: Color = if (style == CustomTextValuesStyle.Colors) {
         if(showValue) {
             if(valueToDouble < 0) {
                 Color.Red
@@ -72,7 +71,7 @@ fun CustomTextValues(
         style = TextStyle(
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
-            color = colorsToValue
+            color = colorToValue
         ),
         modifier = Modifier.semantics {
             contentDescription = textValuesDescription
