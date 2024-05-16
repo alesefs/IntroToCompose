@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.introtocompose.utils.Colors
 import com.example.introtocompose.utils.thenIf
+import java.util.Locale
 
 @Preview(showBackground = true)
 @Composable
@@ -135,12 +136,12 @@ fun CustomTextPill(
                 }
             }
             .padding(horizontal = 8.dp),
-        text = text,
+        text = text.uppercase(Locale.getDefault()),
         maxLines = 1,
         color = if (isFilled) style.textColor else style.backgroundColor,
         style = TextStyle(
-            fontSize = 14.sp,
-            fontWeight = FontWeight.W500
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium
         )
     )
 }
