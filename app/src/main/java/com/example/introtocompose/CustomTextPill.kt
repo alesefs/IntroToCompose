@@ -136,7 +136,7 @@ fun CustomTextPill(
                 }
             }
             .padding(horizontal = 8.dp),
-        text = text.uppercase(Locale.getDefault()),
+        text = text,//.uppercase(Locale.getDefault()),
         maxLines = 1,
         color = if (isFilled) style.textColor else style.backgroundColor,
         style = TextStyle(
