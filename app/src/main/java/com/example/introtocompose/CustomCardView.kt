@@ -234,14 +234,14 @@ fun CustomCardViewPreview1() {
                 contentHeader = {
                     CustomCardView.Header.description(
                         title = "Lorem ipsum dolor sit amet",
+                        description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                                "Suspendisse in neque maximus, tempus lectus in, maximus odio. " +
+                                "Etiam blandit diam at metus semper rutrum. Integer cursus mauris vel neque elementum vehicula. ",
                         icon = rememberVectorPainter(image = Icons.Filled.CheckCircle),
                         action = CustomActionStyle.Icon(
                             actionIcon = rememberVectorPainter(image = Icons.Filled.MoreVert),
                             action = { Log.d("ALELOG", "CustomCardViewHeader: click!") }
-                        ),
-                        description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-                                "Suspendisse in neque maximus, tempus lectus in, maximus odio. " +
-                                "Etiam blandit diam at metus semper rutrum. Integer cursus mauris vel neque elementum vehicula. "
+                        )
                     )
                 },
                 contentCenter = {
@@ -435,22 +435,19 @@ fun CustomCardView.Header.description(
 
         }
 
-        description.let {
-            Spacer(modifier = Modifier.size(8.dp))
+        Spacer(modifier = Modifier.size(8.dp))
 
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f, fill = false),
-                text = description,
-                color = Color.Gray,
-                maxLines = 5,
-                overflow = TextOverflow.Ellipsis,
-                style = TextStyle(
-                    fontSize = 14.sp
-                )
+        Text(
+            modifier = Modifier
+                .fillMaxWidth(),
+            text = description,
+            color = Color.Gray,
+            maxLines = 5,
+            overflow = TextOverflow.Ellipsis,
+            style = TextStyle(
+                fontSize = 14.sp
             )
-        }
+        )
 
     }
 
