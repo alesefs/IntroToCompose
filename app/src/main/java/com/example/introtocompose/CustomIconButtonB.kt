@@ -1,13 +1,10 @@
 package com.example.introtocompose
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -20,9 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.semantics.Role
@@ -143,6 +138,7 @@ fun CustomIconButtonB(
         )*/
 
         CustomIcons(
+            icon = icon,
             size = CustomIconsSize.Large,
             style = CustomIconStyle.Custom(
                 shapedColor = colorDefinitions.backgroundColor(),
@@ -216,7 +212,7 @@ private fun CustomIconButtonBClickPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun CustomIconButtonBPreview(
-    @PreviewParameter(IconButtonPreviewParameterProvider::class) iconButtonData: IconButtonPreviewData,
+    @PreviewParameter(CustomIconButtonBPreviewParameterProvider::class) iconButtonData: CustomIconButtonBPreviewData,
 ) {
     IntroToComposeTheme {
         CustomIconButtonB(
@@ -232,71 +228,71 @@ private fun CustomIconButtonBPreview(
     }
 }
 
-private data class IconButtonPreviewData(
+private data class CustomIconButtonBPreviewData(
     val style: CustomIconButtonBStyle,
     val notificationValue: Int,
     val enable: Boolean,
 )
 
-private class IconButtonPreviewParameterProvider :
-    PreviewParameterProvider<IconButtonPreviewData> {
+private class CustomIconButtonBPreviewParameterProvider :
+    PreviewParameterProvider<CustomIconButtonBPreviewData> {
     override val values = sequenceOf(
-        IconButtonPreviewData(
+        CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Primary,
             notificationValue = 0,
             enable = true
         ),
-        IconButtonPreviewData(
+        CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Primary,
             notificationValue = 5,
             enable = true
         ),
-        IconButtonPreviewData(
+        CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Primary,
             notificationValue = 10,
             enable = true
         ),
-        IconButtonPreviewData(
+        CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Primary,
             notificationValue = 0,
             enable = false
         ),
-        IconButtonPreviewData(
+        CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Primary,
             notificationValue = 5,
             enable = false
         ),
-        IconButtonPreviewData(
+        CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Primary,
             notificationValue = 10,
             enable = false
         ),
-        IconButtonPreviewData(
+        CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Tertiary,
             notificationValue = 0,
             enable = true
         ),
-        IconButtonPreviewData(
+        CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Tertiary,
             notificationValue = 5,
             enable = true
         ),
-        IconButtonPreviewData(
+        CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Tertiary,
             notificationValue = 10,
             enable = true
         ),
-        IconButtonPreviewData(
+        CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Tertiary,
             notificationValue = 0,
             enable = false
         ),
-        IconButtonPreviewData(
+        CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Tertiary,
             notificationValue = 5,
             enable = false
         ),
-        IconButtonPreviewData(
+        CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Tertiary,
             notificationValue = 10,
             enable = false
