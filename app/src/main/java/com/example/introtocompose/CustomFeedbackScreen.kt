@@ -41,8 +41,7 @@ import com.example.introtocompose.utils.thenIf
 
 sealed class CustomFeedbackStyle(
     val iconStyle: CustomIconStyle,
-
-    ) {
+) {
     data object Success : CustomFeedbackStyle(
         iconStyle = CustomIconStyle.Success()
     )
