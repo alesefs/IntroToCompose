@@ -3,6 +3,7 @@ package com.example.introtocompose
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,10 +18,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +31,8 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,29 +43,29 @@ sealed class CustomFeedbackStyle(
     val iconStyle: CustomIconStyle,
 
     ) {
-    class Success : CustomFeedbackStyle(
+    data object Success : CustomFeedbackStyle(
         iconStyle = CustomIconStyle.Success()
     )
 
-    class Warning : CustomFeedbackStyle(
+    data object Warning : CustomFeedbackStyle(
         iconStyle = CustomIconStyle.Warning()
     )
 
-    class Error : CustomFeedbackStyle(
+    data object Error : CustomFeedbackStyle(
         iconStyle = CustomIconStyle.Error()
     )
 
-    class Neutral : CustomFeedbackStyle(
+    data object Neutral : CustomFeedbackStyle(
         iconStyle = CustomIconStyle.Neutral()
     )
 
-    class Informative : CustomFeedbackStyle(
+    data object Informative : CustomFeedbackStyle(
         iconStyle = CustomIconStyle.Info()
     )
 
-    class Custom(
-        feedbackIconShapeColor: Color,
-        feedbackIconColor: Color,
+    data class Custom(
+        val feedbackIconShapeColor: Color,
+        val feedbackIconColor: Color,
     ) : CustomFeedbackStyle(
         iconStyle = CustomIconStyle.Custom(
             shapedColor = feedbackIconShapeColor,
@@ -72,7 +75,7 @@ sealed class CustomFeedbackStyle(
     )
 }
 
-sealed class CustomFeedbackSize(
+/*sealed class CustomFeedbackSize(
     val horizontalPadding: Dp,
     val verticalPadding: Dp,
     val iconPadding: Dp,
@@ -82,7 +85,7 @@ sealed class CustomFeedbackSize(
     val descriptionTextStyle: TextStyle,
     val textAlign: TextAlign
 ) {
-    class Large(
+    data class Large(
         val showCard: Boolean = false
     ) : CustomFeedbackSize(
         horizontalPadding = 16.dp,
@@ -99,7 +102,7 @@ sealed class CustomFeedbackSize(
         textAlign = TextAlign.Center
     )
 
-    class Medium(
+    data class Medium(
         val showCard: Boolean = false
     ) : CustomFeedbackSize(
         horizontalPadding = 12.dp,
@@ -116,7 +119,7 @@ sealed class CustomFeedbackSize(
         textAlign = TextAlign.Center
     )
 
-    class Small(
+    data class Small(
         val showCard: Boolean = false
     ) : CustomFeedbackSize(
         horizontalPadding = 16.dp,
@@ -132,12 +135,78 @@ sealed class CustomFeedbackSize(
         ),
         textAlign = TextAlign.Start
     )
+}*/
+
+interface CustomFeedbackDefinition {
+    val horizontalPadding: Dp
+    val verticalPadding: Dp
+    val iconPadding: Dp
+    val contentAlign: Alignment.Horizontal
+    val iconSize: CustomIconsSize
+    val titleTextStyle: TextStyle
+    val descriptionTextStyle: TextStyle
+    val textAlign: TextAlign
+}
+
+class CustomFeedbackDefinitionSmall : CustomFeedbackDefinition {
+    override val horizontalPadding: Dp = 16.dp
+    override val verticalPadding: Dp = 16.dp
+    override val iconPadding: Dp = 8.dp
+    override val contentAlign: Alignment.Horizontal = Alignment.Start
+    override val iconSize: CustomIconsSize = CustomIconsSize.Small
+    override val titleTextStyle: TextStyle = TextStyle(fontSize = 16.sp)
+    override val descriptionTextStyle: TextStyle = TextStyle(fontSize = 12.sp)
+    override val textAlign: TextAlign = TextAlign.Start
+}
+
+class CustomFeedbackDefinitionMedium : CustomFeedbackDefinition {
+    override val horizontalPadding: Dp = 16.dp
+    override val verticalPadding: Dp = 24.dp
+    override val iconPadding: Dp = 16.dp
+    override val contentAlign: Alignment.Horizontal = Alignment.CenterHorizontally
+    override val iconSize: CustomIconsSize = CustomIconsSize.Medium
+    override val titleTextStyle: TextStyle = TextStyle(fontSize = 16.sp)
+    override val descriptionTextStyle: TextStyle = TextStyle(fontSize = 12.sp)
+    override val textAlign: TextAlign = TextAlign.Center
+}
+
+class CustomFeedbackDefinitionLarge : CustomFeedbackDefinition {
+    override val horizontalPadding: Dp = 16.dp
+    override val verticalPadding: Dp = 16.dp
+    override val iconPadding: Dp = 16.dp
+    override val contentAlign: Alignment.Horizontal = Alignment.CenterHorizontally
+    override val iconSize: CustomIconsSize = CustomIconsSize.Medium
+    override val titleTextStyle: TextStyle = TextStyle(fontSize = 24.sp)
+    override val descriptionTextStyle: TextStyle = TextStyle(fontSize = 16.sp)
+    override val textAlign: TextAlign = TextAlign.Center
 }
 
 data class CustomFeedbackAction(
     val actionTitle: String,
     val action: (() -> Unit)
 )
+
+sealed class CustomFeedbackSize(
+    open val showCard: Boolean = false
+) {
+    data class Large(
+        override val showCard: Boolean = false
+    ) : CustomFeedbackSize(
+        showCard = showCard
+    )
+
+    data class Medium(
+        override val showCard: Boolean = false
+    ) : CustomFeedbackSize(
+        showCard = showCard
+    )
+
+    data class Small(
+        override val showCard: Boolean = false
+    ) : CustomFeedbackSize(
+        showCard = showCard
+    )
+}
 
 @Composable
 fun CustomFeedback(
@@ -149,6 +218,8 @@ fun CustomFeedback(
     description: String? = null,
     action: CustomFeedbackAction? = null
 ) {
+    val definition = CustomFeedbackDefaults.customFeedbackDefinition(size = size)
+
     when (size) {
         is CustomFeedbackSize.Large ->  {
             if (size.showCard) {
@@ -161,10 +232,10 @@ fun CustomFeedback(
                         defaultElevation = 2.dp
                     )
                 ) {
-                    FeedbackContentLargeMedium(modifier, size, icon, style, title, description, action)
+                    FeedbackContentLargeMedium(modifier, size, definition, icon, style, title, description, action)
                 }
             } else {
-                FeedbackContentLargeMedium(modifier, size, icon, style, title, description, action)
+                FeedbackContentLargeMedium(modifier, size, definition, icon, style, title, description, action)
             }
         }
         is CustomFeedbackSize.Medium -> {
@@ -178,10 +249,10 @@ fun CustomFeedback(
                         defaultElevation = 2.dp
                     )
                 ) {
-                    FeedbackContentLargeMedium(modifier, size, icon, style, title, description, action)
+                    FeedbackContentLargeMedium(modifier, size, definition, icon, style, title, description, action)
                 }
             } else {
-                FeedbackContentLargeMedium(modifier, size, icon, style, title, description, action)
+                FeedbackContentLargeMedium(modifier, size, definition, icon, style, title, description, action)
             }
         }
         is CustomFeedbackSize.Small -> {
@@ -195,11 +266,22 @@ fun CustomFeedback(
                         defaultElevation = 2.dp
                     )
                 ) {
-                    FeedbackContentSmall(size, icon, style, title, description, action)
+                    FeedbackContentSmall(size, definition, icon, style, title, description, action)
                 }
             } else {
-                FeedbackContentSmall(size, icon, style, title, description, action)
+                FeedbackContentSmall(size, definition, icon, style, title, description, action)
             }
+        }
+    }
+}
+
+object CustomFeedbackDefaults {
+    @Composable
+    internal fun customFeedbackDefinition(size: CustomFeedbackSize): CustomFeedbackDefinition = remember {
+        when(size) {
+            is CustomFeedbackSize.Large -> CustomFeedbackDefinitionLarge()
+            is CustomFeedbackSize.Medium -> CustomFeedbackDefinitionMedium()
+            is CustomFeedbackSize.Small -> CustomFeedbackDefinitionSmall()
         }
     }
 }
@@ -207,6 +289,7 @@ fun CustomFeedback(
 @Composable
 private fun FeedbackContentSmall(
     size: CustomFeedbackSize,
+    definition: CustomFeedbackDefinition,
     icon: ImageVector,
     type: CustomFeedbackStyle,
     title: String,
@@ -217,15 +300,15 @@ private fun FeedbackContentSmall(
         modifier = Modifier
             .width(328.dp)
             .padding(
-                horizontal = size.horizontalPadding,
-                vertical = size.verticalPadding
+                horizontal = definition.horizontalPadding,
+                vertical = definition.verticalPadding
             ),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.Start
     ) {
-        FeedbackIcon(icon, size, type)
+        FeedbackIcon(icon, size, definition, type)
 
-        FeedbackTextsAndActionContent(size, title, description, action)
+        FeedbackTextsAndActionContent(definition, title, description, action)
     }
 }
 
@@ -233,6 +316,7 @@ private fun FeedbackContentSmall(
 private fun FeedbackContentLargeMedium(
     modifier: Modifier,
     size: CustomFeedbackSize,
+    definition: CustomFeedbackDefinition,
     icon: ImageVector,
     type: CustomFeedbackStyle,
     title: String,
@@ -248,15 +332,15 @@ private fun FeedbackContentLargeMedium(
                 width(328.dp)
             }
             .padding(
-                horizontal = size.horizontalPadding,
-                vertical = size.verticalPadding
+                horizontal = definition.horizontalPadding,
+                vertical = definition.verticalPadding
             ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        FeedbackIcon(icon, size, type)
+        FeedbackIcon(icon, size, definition, type)
 
-        FeedbackTextsAndActionContent(size, title, description, action)
+        FeedbackTextsAndActionContent(definition, title, description, action)
     }
 }
 
@@ -264,27 +348,28 @@ private fun FeedbackContentLargeMedium(
 private fun FeedbackIcon(
     icon: ImageVector,
     size: CustomFeedbackSize,
+    definition: CustomFeedbackDefinition,
     type: CustomFeedbackStyle
 ) {
     CustomIcons(
         icon = rememberVectorPainter(image = icon),
-        size = size.iconSize,
+        size = definition.iconSize,
         style = type.iconStyle
     )
 
     Spacer(modifier = Modifier
         .thenIf(size is CustomFeedbackSize.Small) {
-            width(size.iconPadding)
+            width(definition.iconPadding)
         }
         .thenIf(size !is CustomFeedbackSize.Small) {
-            height(size.iconPadding)
+            height(definition.iconPadding)
         }
     )
 }
 
 @Composable
 private fun FeedbackTextsAndActionContent(
-    size: CustomFeedbackSize,
+    definition: CustomFeedbackDefinition,
     title: String,
     description: String?,
     action: CustomFeedbackAction?
@@ -292,13 +377,13 @@ private fun FeedbackTextsAndActionContent(
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = size.contentAlign
+        horizontalAlignment = definition.contentAlign
     ) {
         Text(
             text = title,
             color = Color.Black,
-            style = size.titleTextStyle,
-            textAlign = size.textAlign
+            style = definition.titleTextStyle,
+            textAlign = definition.textAlign
         )
 
         description?.let {
@@ -307,8 +392,8 @@ private fun FeedbackTextsAndActionContent(
             Text(
                 text = description,
                 color = Color.Gray,
-                style = size.descriptionTextStyle,
-                textAlign = size.textAlign
+                style = definition.descriptionTextStyle,
+                textAlign = definition.textAlign
             )
         }
 
@@ -331,14 +416,61 @@ private fun FeedbackTextsAndActionContent(
 
 @Preview(showBackground = true)
 @Composable
+private fun CustomFeedbackListPreview(
+    @PreviewParameter(CustomFeedbackParameterProvider::class) customFeedbackData : CustomFeedbackPreviewData
+) {
+    IntroToComposeTheme {
+        Box(modifier = Modifier.padding(2.dp)) {
+            CustomFeedback(
+                title = customFeedbackData.title,
+                icon = Icons.Filled.AccountCircle,
+                size = customFeedbackData.size,
+                style = customFeedbackData.style,
+                description = "He lands head first on a rotting maple log.\n" +
+                        "Knocked unconscious, fox sleeps with shallow breath\n" +
+                        "until the lazy dog awakes.",
+                action = CustomFeedbackAction("Click!") {}
+            )
+        }
+    }
+}
+
+private class CustomFeedbackParameterProvider : PreviewParameterProvider<CustomFeedbackPreviewData>  {
+    override val values = sequenceOf(
+        CustomFeedbackPreviewData(
+            title = "Custom Feedback,\n size: Large, style: Success",
+            size = CustomFeedbackSize.Large(showCard = true),
+            style = CustomFeedbackStyle.Success
+        ),
+        CustomFeedbackPreviewData(
+            title = "Custom Feedback,\n size: Medium, style: Success",
+            size = CustomFeedbackSize.Medium(),
+            style = CustomFeedbackStyle.Success
+        ),
+        CustomFeedbackPreviewData(
+            title = "Custom Feedback,\n size: Small, style: Success",
+            size = CustomFeedbackSize.Small(),
+            style = CustomFeedbackStyle.Success
+        )
+    )
+}
+
+private data class CustomFeedbackPreviewData(
+    val title: String,
+    val size: CustomFeedbackSize,
+    val style: CustomFeedbackStyle
+)
+
+@Preview(showBackground = true)
+@Composable
 fun CustomFeedbackPreview() {
     IntroToComposeTheme {
         val allTypes = listOf(
-            CustomFeedbackStyle.Success(),
-            CustomFeedbackStyle.Warning(),
-            CustomFeedbackStyle.Error(),
-            CustomFeedbackStyle.Neutral(),
-            CustomFeedbackStyle.Informative(),
+            CustomFeedbackStyle.Success,
+            CustomFeedbackStyle.Warning,
+            CustomFeedbackStyle.Error,
+            CustomFeedbackStyle.Neutral,
+            CustomFeedbackStyle.Informative,
             CustomFeedbackStyle.Custom(
                 feedbackIconColor = Color.Cyan,
                 feedbackIconShapeColor = Color.Black
@@ -395,7 +527,7 @@ fun CustomFeedbackSuccessPreview() {
                     title = "The quick brown fox jumps over",
                     icon = Icons.Filled.AccountCircle,
                     size = size,
-                    style = CustomFeedbackStyle.Success(),
+                    style = CustomFeedbackStyle.Success,
                     description = "He lands head first on a rotting maple log.\n" +
                             "Knocked unconscious, fox sleeps with shallow breath\n" +
                             "until the lazy dog awakes.",
