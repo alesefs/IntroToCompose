@@ -139,6 +139,7 @@ fun CustomIconButtonB(
 
         CustomIcons(
             icon = icon,
+            contentDescription = iconDescription,
             size = CustomIconsSize.Large,
             style = CustomIconStyle.Custom(
                 shapedColor = colorDefinitions.backgroundColor(),

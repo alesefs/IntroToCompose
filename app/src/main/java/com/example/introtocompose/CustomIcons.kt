@@ -388,7 +388,8 @@ fun CustomIcons(
     size: CustomIconsSize,
     style: CustomIconStyle,
     modifier: Modifier = Modifier,
-    icon: Painter = rememberVectorPainter(image = Icons.Filled.CheckCircle)
+    icon: Painter = rememberVectorPainter(image = Icons.Filled.CheckCircle),
+    contentDescription: String? = null
 ) {
     /*val showShaped = when(style) {
         is CustomIconStyle.Custom -> style.showShape
@@ -426,7 +427,7 @@ fun CustomIcons(
                 }
                 .size(size.iconSize),
             painter = icon,
-            contentDescription = null,
+            contentDescription = contentDescription,
             colorFilter = ColorFilter.tint(style.iconColor, BlendMode.SrcIn)
         )
     }
