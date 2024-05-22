@@ -1,5 +1,6 @@
 package com.example.introtocompose
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -31,7 +32,8 @@ import com.example.introtocompose.ui.theme.IntroToComposeTheme
 
 enum class CustomIconButtonBStyle {
     Primary,
-    Tertiary
+    TertiaryDark,
+    TertiaryLight
 }
 
 @Stable
@@ -67,7 +69,7 @@ private class PrimaryIconButtonBDefinitions(val enable: Boolean) : IconButtonBDe
 }
 
 @Immutable
-private class TertiaryIconButtonBDefinitions(val enable: Boolean) : IconButtonBDefinitions {
+private class TertiaryDarkIconButtonBDefinitions(val enable: Boolean) : IconButtonBDefinitions {
     @Composable
     override fun backgroundColor(): Color = Color.Transparent
 
@@ -82,6 +84,22 @@ private class TertiaryIconButtonBDefinitions(val enable: Boolean) : IconButtonBD
     override fun rippleColor(): Color = Color.Cyan
 }
 
+@Immutable
+private class TertiaryLightIconButtonBDefinitions(val enable: Boolean) : IconButtonBDefinitions {
+    @Composable
+    override fun backgroundColor(): Color = Color.Transparent
+
+    @Composable
+    override fun iconColor(): Color = if (enable) {
+        Color.White
+    } else {
+        Color.Gray
+    }
+
+    @Composable
+    override fun rippleColor(): Color = Color.Gray
+}
+
 object IconButtonDefaults {
     @Composable
     internal fun iconButtonColorDefinitions(
@@ -90,7 +108,8 @@ object IconButtonDefaults {
     ): IconButtonBDefinitions {
         return when (style) {
             CustomIconButtonBStyle.Primary -> PrimaryIconButtonBDefinitions(enable)
-            CustomIconButtonBStyle.Tertiary -> TertiaryIconButtonBDefinitions(enable)
+            CustomIconButtonBStyle.TertiaryDark -> TertiaryDarkIconButtonBDefinitions(enable)
+            CustomIconButtonBStyle.TertiaryLight -> TertiaryLightIconButtonBDefinitions(enable)
         }
     }
 }
@@ -101,7 +120,8 @@ fun CustomIconButtonB(
     icon: Painter,
     modifier: Modifier = Modifier,
     iconDescription: String? = null,
-    notificationValue: Int = 0,
+    badgesType: CustomBadgesType = CustomBadgesType.Counter(0),
+    showBadge: Boolean = false,
     enable: Boolean = true,
     action: () -> Unit
 ) {
@@ -162,12 +182,15 @@ fun CustomIconButtonB(
                 .semantics { role = Role.Button }
         )
 
-        if (notificationValue > 0) {
+        if (enable) {
             CustomBadges(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(0.dp),
-                type = CustomBadgesType.Counter(notificationValue),
+                    .padding(
+                        if (badgesType is CustomBadgesType.Indicator) 3.dp else 0.dp
+                    ),
+                type = badgesType,
+                show = showBadge
             )
         }
     }
@@ -187,7 +210,8 @@ private fun CustomIconButtonBClickPreview() {
                 icon = rememberVectorPainter(
                     image = Icons.Default.AccountCircle
                 ),
-                notificationValue = notificationValue.intValue,
+                badgesType = CustomBadgesType.Counter(notificationValue.intValue),
+                showBadge = true,
                 enable = true
             ) {
                 notificationValue.intValue += 1
@@ -195,15 +219,31 @@ private fun CustomIconButtonBClickPreview() {
             }
 
             CustomIconButtonB(
-                style = CustomIconButtonBStyle.Tertiary,
+                style = CustomIconButtonBStyle.TertiaryDark,
                 icon = rememberVectorPainter(
                     image = Icons.Default.AccountCircle
                 ),
-                notificationValue = notificationValue.intValue,
+                badgesType = CustomBadgesType.Counter(notificationValue.intValue),
+                showBadge = true,
                 enable = true
             ) {
                 notificationValue.intValue -= 1
                 println("click! ${notificationValue.intValue}")
+            }
+
+            Box(modifier = Modifier.background(Color.Black)) {
+                CustomIconButtonB(
+                    style = CustomIconButtonBStyle.TertiaryLight,
+                    icon = rememberVectorPainter(
+                        image = Icons.Default.AccountCircle
+                    ),
+                    badgesType = CustomBadgesType.Counter(notificationValue.intValue),
+                    showBadge = true,
+                    enable = true
+                ) {
+                    notificationValue.intValue -= 1
+                    println("click! ${notificationValue.intValue}")
+                }
             }
         }
 
@@ -216,22 +256,32 @@ private fun CustomIconButtonBPreview(
     @PreviewParameter(CustomIconButtonBPreviewParameterProvider::class) iconButtonData: CustomIconButtonBPreviewData,
 ) {
     IntroToComposeTheme {
-        CustomIconButtonB(
-            style = iconButtonData.style,
-            icon = rememberVectorPainter(
-                image = Icons.Default.AccountCircle
-            ),
-            notificationValue = iconButtonData.notificationValue,
-            enable = iconButtonData.enable
+        Box(modifier = Modifier.background(
+            if (iconButtonData.style == CustomIconButtonBStyle.TertiaryLight) {
+                Color.Black
+            } else {
+                Color.White
+            })
         ) {
-            println("click! ${iconButtonData.style}, ${iconButtonData.enable}, ${iconButtonData.notificationValue}")
+            CustomIconButtonB(
+                style = iconButtonData.style,
+                icon = rememberVectorPainter(
+                    image = Icons.Default.AccountCircle
+                ),
+                badgesType = iconButtonData.badgesType,
+                showBadge = iconButtonData.showBadge,
+                enable = iconButtonData.enable
+            ) {
+                println("click! ${iconButtonData.style}, ${iconButtonData.enable}, ${iconButtonData.badgesType}")
+            }
         }
     }
 }
 
 private data class CustomIconButtonBPreviewData(
     val style: CustomIconButtonBStyle,
-    val notificationValue: Int,
+    val badgesType: CustomBadgesType,
+    val showBadge: Boolean,
     val enable: Boolean,
 )
 
@@ -240,63 +290,93 @@ private class CustomIconButtonBPreviewParameterProvider :
     override val values = sequenceOf(
         CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Primary,
-            notificationValue = 0,
+            badgesType = CustomBadgesType.Counter(0),
+            showBadge = true,
             enable = true
         ),
         CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Primary,
-            notificationValue = 5,
+            badgesType = CustomBadgesType.Counter(5),
+            showBadge = true,
             enable = true
         ),
         CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Primary,
-            notificationValue = 10,
+            badgesType = CustomBadgesType.Counter(10),
+            showBadge = true,
             enable = true
         ),
         CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Primary,
-            notificationValue = 0,
-            enable = false
+            badgesType = CustomBadgesType.Indicator(indicatorColor = BadgeIndicatorColor.Alert),
+            showBadge = true,
+            enable = true
         ),
         CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Primary,
-            notificationValue = 5,
+            badgesType = CustomBadgesType.Counter(10),
+            showBadge = true,
             enable = false
         ),
         CustomIconButtonBPreviewData(
-            style = CustomIconButtonBStyle.Primary,
-            notificationValue = 10,
-            enable = false
-        ),
-        CustomIconButtonBPreviewData(
-            style = CustomIconButtonBStyle.Tertiary,
-            notificationValue = 0,
+            style = CustomIconButtonBStyle.TertiaryDark,
+            badgesType = CustomBadgesType.Counter(0),
+            showBadge = true,
             enable = true
         ),
         CustomIconButtonBPreviewData(
-            style = CustomIconButtonBStyle.Tertiary,
-            notificationValue = 5,
+            style = CustomIconButtonBStyle.TertiaryDark,
+            badgesType = CustomBadgesType.Counter(5),
+            showBadge = true,
             enable = true
         ),
         CustomIconButtonBPreviewData(
-            style = CustomIconButtonBStyle.Tertiary,
-            notificationValue = 10,
+            style = CustomIconButtonBStyle.TertiaryDark,
+            badgesType = CustomBadgesType.Counter(10),
+            showBadge = true,
             enable = true
         ),
         CustomIconButtonBPreviewData(
-            style = CustomIconButtonBStyle.Tertiary,
-            notificationValue = 0,
+            style = CustomIconButtonBStyle.TertiaryDark,
+            badgesType = CustomBadgesType.Indicator(indicatorColor = BadgeIndicatorColor.Alert),
+            showBadge = true,
+            enable = true
+        ),
+        CustomIconButtonBPreviewData(
+            style = CustomIconButtonBStyle.TertiaryDark,
+            badgesType = CustomBadgesType.Counter(10),
+            showBadge = true,
             enable = false
         ),
         CustomIconButtonBPreviewData(
-            style = CustomIconButtonBStyle.Tertiary,
-            notificationValue = 5,
-            enable = false
+            style = CustomIconButtonBStyle.TertiaryLight,
+            badgesType = CustomBadgesType.Counter(0),
+            showBadge = true,
+            enable = true
         ),
         CustomIconButtonBPreviewData(
-            style = CustomIconButtonBStyle.Tertiary,
-            notificationValue = 10,
-            enable = false
+            style = CustomIconButtonBStyle.TertiaryLight,
+            badgesType = CustomBadgesType.Counter(5),
+            showBadge = true,
+            enable = true
         ),
+        CustomIconButtonBPreviewData(
+            style = CustomIconButtonBStyle.TertiaryLight,
+            badgesType = CustomBadgesType.Counter(10),
+            showBadge = true,
+            enable = true
+        ),
+        CustomIconButtonBPreviewData(
+            style = CustomIconButtonBStyle.TertiaryLight,
+            badgesType = CustomBadgesType.Indicator(indicatorColor = BadgeIndicatorColor.Alert),
+            showBadge = true,
+            enable = true
+        ),
+        CustomIconButtonBPreviewData(
+            style = CustomIconButtonBStyle.TertiaryLight,
+            badgesType = CustomBadgesType.Counter(10),
+            showBadge = true,
+            enable = false
+        )
     )
 }
