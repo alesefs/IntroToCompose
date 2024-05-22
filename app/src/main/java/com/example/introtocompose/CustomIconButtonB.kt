@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -32,6 +33,7 @@ import com.example.introtocompose.ui.theme.IntroToComposeTheme
 
 enum class CustomIconButtonBStyle {
     Primary,
+    Secondary,
     TertiaryDark,
     TertiaryLight
 }
@@ -43,6 +45,9 @@ internal interface IconButtonBDefinitions {
 
     @Composable
     fun iconColor(): Color
+
+    @Composable
+    fun borderColor(): Color
 
     @Composable
     fun rippleColor(): Color
@@ -65,6 +70,32 @@ private class PrimaryIconButtonBDefinitions(val enable: Boolean) : IconButtonBDe
     }
 
     @Composable
+    override fun borderColor() = Color.Transparent
+
+    @Composable
+    override fun rippleColor(): Color = Color.Cyan
+}
+
+@Immutable
+private class SecondaryIconButtonBDefinitions(val enable: Boolean) : IconButtonBDefinitions {
+    @Composable
+    override fun backgroundColor(): Color = Color.White
+
+    @Composable
+    override fun iconColor(): Color = if (enable) {
+        Color.Blue
+    } else {
+        Color.Gray
+    }
+
+    @Composable
+    override fun borderColor(): Color = if (enable) {
+        Color.Blue
+    } else {
+        Color.Gray
+    }
+
+    @Composable
     override fun rippleColor(): Color = Color.Cyan
 }
 
@@ -79,6 +110,9 @@ private class TertiaryDarkIconButtonBDefinitions(val enable: Boolean) : IconButt
     } else {
         Color.Gray
     }
+
+    @Composable
+    override fun borderColor(): Color = Color.Transparent
 
     @Composable
     override fun rippleColor(): Color = Color.Cyan
@@ -97,6 +131,9 @@ private class TertiaryLightIconButtonBDefinitions(val enable: Boolean) : IconBut
     }
 
     @Composable
+    override fun borderColor(): Color = Color.Transparent
+
+    @Composable
     override fun rippleColor(): Color = Color.Gray
 }
 
@@ -110,6 +147,7 @@ object IconButtonDefaults {
             CustomIconButtonBStyle.Primary -> PrimaryIconButtonBDefinitions(enable)
             CustomIconButtonBStyle.TertiaryDark -> TertiaryDarkIconButtonBDefinitions(enable)
             CustomIconButtonBStyle.TertiaryLight -> TertiaryLightIconButtonBDefinitions(enable)
+            CustomIconButtonBStyle.Secondary -> SecondaryIconButtonBDefinitions(enable)
         }
     }
 }
@@ -163,7 +201,10 @@ fun CustomIconButtonB(
             size = CustomIconsSize.Large,
             style = CustomIconStyle.Custom(
                 shapedColor = colorDefinitions.backgroundColor(),
-                iconeColor = colorDefinitions.iconColor()
+                iconeColor = colorDefinitions.iconColor(),
+                borderedColor = colorDefinitions.borderColor(),
+                showCustomShape = true,
+                showCustomBorder = true
             ),
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(999.dp))
@@ -204,7 +245,7 @@ private fun CustomIconButtonBClickPreview() {
             mutableIntStateOf(0)
         }
 
-        Column {
+        Row {
             CustomIconButtonB(
                 style = CustomIconButtonBStyle.Primary,
                 icon = rememberVectorPainter(
@@ -215,6 +256,19 @@ private fun CustomIconButtonBClickPreview() {
                 enable = true
             ) {
                 notificationValue.intValue += 1
+                println("click! ${notificationValue.intValue}")
+            }
+
+            CustomIconButtonB(
+                style = CustomIconButtonBStyle.Secondary,
+                icon = rememberVectorPainter(
+                    image = Icons.Default.AccountCircle
+                ),
+                badgesType = CustomBadgesType.Counter(notificationValue.intValue),
+                showBadge = true,
+                enable = true
+            ) {
+                notificationValue.intValue -= 1
                 println("click! ${notificationValue.intValue}")
             }
 
@@ -257,7 +311,8 @@ private fun CustomIconButtonBPreview(
 ) {
     IntroToComposeTheme {
         Box(modifier = Modifier.background(
-            if (iconButtonData.style == CustomIconButtonBStyle.TertiaryLight) {
+            if (iconButtonData.style == CustomIconButtonBStyle.TertiaryLight ||
+                iconButtonData.style == CustomIconButtonBStyle.Secondary) {
                 Color.Black
             } else {
                 Color.White
@@ -314,6 +369,36 @@ private class CustomIconButtonBPreviewParameterProvider :
         ),
         CustomIconButtonBPreviewData(
             style = CustomIconButtonBStyle.Primary,
+            badgesType = CustomBadgesType.Counter(10),
+            showBadge = true,
+            enable = false
+        ),
+        CustomIconButtonBPreviewData(
+            style = CustomIconButtonBStyle.Secondary,
+            badgesType = CustomBadgesType.Counter(0),
+            showBadge = true,
+            enable = true
+        ),
+        CustomIconButtonBPreviewData(
+            style = CustomIconButtonBStyle.Secondary,
+            badgesType = CustomBadgesType.Counter(5),
+            showBadge = true,
+            enable = true
+        ),
+        CustomIconButtonBPreviewData(
+            style = CustomIconButtonBStyle.Secondary,
+            badgesType = CustomBadgesType.Counter(10),
+            showBadge = true,
+            enable = true
+        ),
+        CustomIconButtonBPreviewData(
+            style = CustomIconButtonBStyle.Secondary,
+            badgesType = CustomBadgesType.Indicator(indicatorColor = BadgeIndicatorColor.Alert),
+            showBadge = true,
+            enable = true
+        ),
+        CustomIconButtonBPreviewData(
+            style = CustomIconButtonBStyle.Secondary,
             badgesType = CustomBadgesType.Counter(10),
             showBadge = true,
             enable = false

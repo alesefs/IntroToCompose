@@ -2,6 +2,7 @@ package com.example.introtocompose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,42 +50,53 @@ object CustomIconsColor {
 sealed class CustomIconStyle(
     val shapeColor: Color,
     val iconColor: Color,
-    val showShape: Boolean = true
+    val borderColor: Color,
+    val showShape: Boolean = true,
+    val showBorder: Boolean = false
 ) {
     class Success : CustomIconStyle(
         shapeColor = CustomIconsColor.LightGreen,
-        iconColor = CustomIconsColor.DarkGreen
+        iconColor = CustomIconsColor.DarkGreen,
+        borderColor = CustomIconsColor.DarkGreen,
     )
 
     class Warning : CustomIconStyle(
         shapeColor = CustomIconsColor.LightYellow,
-        iconColor = CustomIconsColor.DarkYellow
+        iconColor = CustomIconsColor.DarkYellow,
+        borderColor = CustomIconsColor.DarkYellow,
     )
 
     class Error : CustomIconStyle(
         shapeColor = CustomIconsColor.LightRed,
-        iconColor = CustomIconsColor.DarkRed
+        iconColor = CustomIconsColor.DarkRed,
+        borderColor = CustomIconsColor.DarkRed
     )
 
     class Info : CustomIconStyle(
         shapeColor = CustomIconsColor.LightCyan,
-        iconColor = CustomIconsColor.DarkCyan
+        iconColor = CustomIconsColor.DarkCyan,
+        borderColor = CustomIconsColor.DarkCyan,
     )
 
     class Neutral(val showNeutralShape: Boolean = true) : CustomIconStyle(
         shapeColor = Color.LightGray,
         iconColor = Color.DarkGray,
+        borderColor = Color.DarkGray,
         showShape = showNeutralShape
     )
 
     data class Custom(
         val shapedColor: Color = Color.LightGray,
         val iconeColor: Color = Color.DarkGray,
-        val showCustomShape: Boolean = true
+        val borderedColor: Color = Color.DarkGray,
+        val showCustomShape: Boolean = true,
+        val showCustomBorder: Boolean = false
     ) : CustomIconStyle(
         shapeColor = shapedColor,
         iconColor = iconeColor,
-        showShape = showCustomShape
+        borderColor = borderedColor,
+        showShape = showCustomShape,
+        showBorder = showCustomBorder
     )
 }
 
@@ -187,7 +199,7 @@ fun CustomIconsPreview2() {
         )
 
         Column {
-            Row (
+            Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -359,18 +371,40 @@ fun CustomIconPreview2() {
             CustomIconStyle.Info(),
             CustomIconStyle.Neutral(showNeutralShape = true),
             CustomIconStyle.Neutral(showNeutralShape = false),
-            CustomIconStyle.Custom(shapedColor = Color.Cyan, iconeColor = Color.Black, true),
-            CustomIconStyle.Custom(shapedColor = Color.Cyan, iconeColor = Color.Red, false),
+            CustomIconStyle.Custom(
+                shapedColor = Color.Cyan,
+                iconeColor = Color.Black,
+                showCustomShape = true
+            ),
+            CustomIconStyle.Custom(
+                shapedColor = Color.Cyan,
+                iconeColor = Color.Red,
+                showCustomShape = false
+            ),
+            CustomIconStyle.Custom(
+                shapedColor = Color.Cyan,
+                iconeColor = Color.Red,
+                borderedColor = Color.Red,
+                showCustomShape = false,
+                showCustomBorder = true
+            ),
+            CustomIconStyle.Custom(
+                shapedColor = Color.Cyan,
+                iconeColor = Color.Red,
+                borderedColor = Color.Red,
+                showCustomShape = true,
+                showCustomBorder = true
+            ),
         )
-        
+
         val allCasesSizes = listOf(
             CustomIconsSize.Large,
             CustomIconsSize.Medium,
             CustomIconsSize.Small,
         )
-        
+
         Column {
-            allCasesStyles.forEach { style -> 
+            allCasesStyles.forEach { style ->
                 Column {
                     Row {
                         allCasesSizes.forEach { size ->
@@ -419,8 +453,20 @@ fun CustomIcons(
     Box(modifier = modifier) {
         Image(
             modifier = Modifier
-                .thenIf(style.showShape) {
+                .thenIf(style.showBorder && !style.showShape) {
                     size(size.shapeSize)
+                        .border(width = 2.dp, color = style.borderColor, shape = CircleShape)
+                        .padding(size.padding)
+                }
+                .thenIf(style.showShape && !style.showBorder) {
+                    size(size.shapeSize)
+                        .clip(CircleShape)
+                        .background(style.shapeColor)
+                        .padding(size.padding)
+                }
+                .thenIf(style.showShape && style.showBorder) {
+                    size(size.shapeSize)
+                        .border(width = 2.dp, color = style.borderColor, shape = CircleShape)
                         .clip(CircleShape)
                         .background(style.shapeColor)
                         .padding(size.padding)
