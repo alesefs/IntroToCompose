@@ -74,6 +74,8 @@ dependencies {
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
     implementation(libs.androidx.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
