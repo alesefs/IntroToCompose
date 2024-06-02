@@ -470,27 +470,27 @@ val textPillList = listOf(
     CustomTextPillModel(
         text = "Texto 1",
         isFilled = true,
-        style = CustomTextPillStyle.Neutral()
+        style = CustomTextPillStyle.Neutral
     ),
     CustomTextPillModel(
         text = "Texto 2",
         isFilled = true,
-        style = CustomTextPillStyle.Neutral()
+        style = CustomTextPillStyle.Neutral
     ),
     CustomTextPillModel(
         text = "Texto 3",
         isFilled = true,
-        style = CustomTextPillStyle.Neutral()
+        style = CustomTextPillStyle.Neutral
     ),
     CustomTextPillModel(
         text = "Texto 4",
         isFilled = true,
-        style = CustomTextPillStyle.Neutral()
+        style = CustomTextPillStyle.Neutral
     ),
     CustomTextPillModel(
         text = "Texto5 ",
         isFilled = true,
-        style = CustomTextPillStyle.Neutral()
+        style = CustomTextPillStyle.Neutral
     )
 )
 
@@ -523,7 +523,8 @@ fun CustomCardView.Center.simple(
                         CustomTextPill(
                             text = pill.text,
                             isFilled = pill.isFilled,
-                            style = pill.style
+                            style = pill.style,
+                            isMarquee = false
                         )
                     }
                 }

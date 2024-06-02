@@ -1,10 +1,17 @@
 package com.example.introtocompose
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
@@ -24,15 +31,20 @@ import java.util.Locale
 fun CustomTextPillPreview() {
 
     val allCasesStyles = listOf(
-        CustomTextPillStyle.Success(),
-        CustomTextPillStyle.Warning(),
-        CustomTextPillStyle.Error(),
-        CustomTextPillStyle.Info(),
-        CustomTextPillStyle.Neutral(),
+        CustomTextPillStyle.Success,
+        CustomTextPillStyle.Warning,
+        CustomTextPillStyle.Error,
+        CustomTextPillStyle.Info,
+        CustomTextPillStyle.Neutral,
         CustomTextPillStyle.Custom(Color.Cyan, Color.Black),
     )
 
     val allCasesIsFilled = listOf(
+        true,
+        false
+    )
+
+    val allCasesIsMarquee = listOf(
         true,
         false
     )
@@ -42,11 +54,14 @@ fun CustomTextPillPreview() {
             Column {
                 Row {
                     allCasesIsFilled.forEach { isFilled ->
-                        CustomTextPill(
-                            text = "Text",
-                            isFilled = isFilled,
-                            style = style
-                        )
+                        allCasesIsMarquee.forEach { isMarquee ->
+                            CustomTextPill(
+                                text = if (isMarquee) "Text-1-2-3-4-5-6" else "Text",
+                                isFilled = isFilled,
+                                style = style,
+                                isMarquee = isMarquee
+                            )
+                        }
                     }
                 }
             }
@@ -67,39 +82,38 @@ sealed class CustomTextPillStyle(
     val backgroundColor: Color,
     val textColor: Color,
 ) {
-    class Success : CustomTextPillStyle(
+    data object Success : CustomTextPillStyle(
         backgroundColor = CustomIconsColor.DarkGreen,
         textColor = Color.White,
     )
 
-    class Warning : CustomTextPillStyle(
+    data object Warning : CustomTextPillStyle(
         backgroundColor = Color.Yellow,
         textColor = Color.Black,
     )
 
-    class Error : CustomTextPillStyle(
+    data object Error : CustomTextPillStyle(
         backgroundColor = Color.Red,
         textColor = Color.White,
     )
 
-    class Info : CustomTextPillStyle(
+    data object Info : CustomTextPillStyle(
         backgroundColor = Colors.LightBlue,
         textColor = Color.White,
     )
 
-    class Neutral : CustomTextPillStyle(
+    data object Neutral : CustomTextPillStyle(
         backgroundColor = Color.LightGray,
         textColor = Color.Black,
     )
 
-    class Custom(
-        backgroundCustomColor: Color,
-        textCustomColor: Color
+    data class Custom(
+        val backgroundCustomColor: Color,
+        val textCustomColor: Color
     ) : CustomTextPillStyle(
         backgroundColor = backgroundCustomColor,
         textColor = textCustomColor,
     )
-
 }
 
 data class CustomTextPillModel(
@@ -108,40 +122,93 @@ data class CustomTextPillModel(
     val style: CustomTextPillStyle
 )
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CustomTextPill(
     text: String,
     isFilled: Boolean,
     style: CustomTextPillStyle,
+    isMarquee: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Text(
+    Box(
         modifier = modifier
-            .padding(1.dp)
-            .thenIf(isFilled) {
-                drawBehind {
-                    drawRoundRect(
-                        color = style.backgroundColor,
-                        cornerRadius = CornerRadius(999.dp.toPx())
-                    )
+    ) {
+        Box(
+            modifier = Modifier
+                .thenIf(isMarquee) {
+                    width(75.dp)
                 }
-            }
-            .thenIf(!isFilled) {
-                drawBehind {
-                    drawRoundRect(
-                        color = style.backgroundColor,
-                        cornerRadius = CornerRadius(999.dp.toPx()),
-                        style = Stroke(width = 2f)
-                    )
+                .thenIf(!isMarquee) {
+                    wrapContentWidth()
                 }
-            }
-            .padding(horizontal = 8.dp),
-        text = text,//.uppercase(Locale.getDefault()),
-        maxLines = 1,
-        color = if (isFilled) style.textColor else style.backgroundColor,
-        style = TextStyle(
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium
-        )
-    )
+                .padding(1.dp)
+                .thenIf(isFilled) {
+                    drawBehind {
+                        drawRoundRect(
+                            color = style.backgroundColor,
+                            cornerRadius = CornerRadius(999.dp.toPx())
+                        )
+                    }
+                }
+                .thenIf(!isFilled) {
+                    drawBehind {
+                        drawRoundRect(
+                            color = style.backgroundColor,
+                            cornerRadius = CornerRadius(999.dp.toPx()),
+                            style = Stroke(width = 2f)
+                        )
+                    }
+                }
+                .padding(horizontal = 8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                modifier = Modifier
+                    .thenIf(isMarquee) {
+                        basicMarquee()
+                    },
+                text = text,//.uppercase(Locale.getDefault()),
+                maxLines = 1,
+                color = if (isFilled) style.textColor else style.backgroundColor,
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            )
+        }
+    }
+
+    /* Text(
+         modifier = modifier
+             .padding(1.dp)
+             .thenIf(isMarquee) {
+                 basicMarquee()
+             }
+             .thenIf(isFilled) {
+                 drawBehind {
+                     drawRoundRect(
+                         color = style.backgroundColor,
+                         cornerRadius = CornerRadius(999.dp.toPx())
+                     )
+                 }
+             }
+             .thenIf(!isFilled) {
+                 drawBehind {
+                     drawRoundRect(
+                         color = style.backgroundColor,
+                         cornerRadius = CornerRadius(999.dp.toPx()),
+                         style = Stroke(width = 2f)
+                     )
+                 }
+             }
+             .padding(horizontal = 8.dp),
+         text = text,//.uppercase(Locale.getDefault()),
+         maxLines = 1,
+         color = if (isFilled) style.textColor else style.backgroundColor,
+         style = TextStyle(
+             fontSize = 12.sp,
+             fontWeight = FontWeight.Medium
+         )
+     )*/
 }
