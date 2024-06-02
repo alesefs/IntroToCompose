@@ -1,6 +1,7 @@
 package com.example.introtocompose
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -166,7 +167,7 @@ fun CustomTextPill(
             Text(
                 modifier = Modifier
                     .thenIf(isMarquee) {
-                        basicMarquee()
+                        basicMarquee(spacing = MarqueeSpacing(spacing = 4.dp))
                     },
                 text = text,//.uppercase(Locale.getDefault()),
                 maxLines = 1,
