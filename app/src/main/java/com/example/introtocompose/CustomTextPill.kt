@@ -167,7 +167,10 @@ fun CustomTextPill(
             Text(
                 modifier = Modifier
                     .thenIf(isMarquee) {
-                        basicMarquee(spacing = MarqueeSpacing(spacing = 4.dp))
+                        basicMarquee(
+                            iterations = Int.MAX_VALUE,
+                            spacing = MarqueeSpacing(spacing = 4.dp)
+                        )
                     },
                 text = text,//.uppercase(Locale.getDefault()),
                 maxLines = 1,
