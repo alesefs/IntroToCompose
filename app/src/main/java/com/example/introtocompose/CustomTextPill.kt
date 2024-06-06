@@ -140,9 +140,6 @@ fun CustomTextPill(
                 .thenIf(isMarquee) {
                     width(75.dp)
                 }
-                .thenIf(!isMarquee) {
-                    wrapContentWidth()
-                }
                 .padding(1.dp)
                 .thenIf(isFilled) {
                     drawBehind {
@@ -169,7 +166,7 @@ fun CustomTextPill(
                     .thenIf(isMarquee) {
                         basicMarquee(
                             iterations = Int.MAX_VALUE,
-                            spacing = MarqueeSpacing(spacing = 4.dp)
+                            spacing = MarqueeSpacing(spacing = 15.dp)
                         )
                     },
                 text = text,//.uppercase(Locale.getDefault()),
