@@ -57,7 +57,7 @@ fun CustomTextPillPreview() {
                     allCasesIsFilled.forEach { isFilled ->
                         allCasesIsMarquee.forEach { isMarquee ->
                             CustomTextPill(
-                                text = if (isMarquee) "Text-1-2-3-4-5-6" else "Text",
+                                text = if (isMarquee)  "Tech, Video games" else "Text",
                                 isFilled = isFilled,
                                 style = style,
                                 isMarquee = isMarquee
