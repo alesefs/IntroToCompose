@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="pt-BR">
+    <string name="number_to_word_zero">zero</string>
+    <string name="number_to_word_one">um</string>
+    <string name="number_to_word_hundred">cem</string>
+    <string name="number_to_word_money_unit">Real</string>
+    <string name="number_to_word_money_mult">Reais</string>
+    <string name="number_to_word_cent">Centavo</string>
+    <string name="number_to_word_cents">Centavos</string>
+    <string name="number_to_word_negative">Negativo, </string>
+    <string name="number_to_word_and"> e </string>
+    <string name="number_to_word_empty"/>
+    <string name="number_to_word_millions">ões</string>
+
+    <string-array name="number_to_word_units">
+        <item name="empty" />
+        <item>um</item>
+        <item>dois</item>
+        <item>três</item>
+        <item>quatro</item>
+        <item>cinco</item>
+        <item>seis</item>
+        <item>sete</item>
+        <item>oito</item>
+        <item>nove</item>
+        <item>dez</item>
+        <item>onze</item>
+        <item>doze</item>
+        <item>treze</item>
+        <item>quatorze</item>
+        <item>quinze</item>
+        <item>dezesseis</item>
+        <item>dezessete</item>
+        <item>dezoito</item>
+        <item>dezenove</item>
+    </string-array>
+
+    <string-array name="number_to_word_tens">
+        <item name="empty" />
+        <item name="empty" />
+        <item>vinte</item>
+        <item>trinta</item>
+        <item>quarenta</item>
+        <item>cinquenta</item>
+        <item>sessenta</item>
+        <item>setenta</item>
+        <item>oitenta</item>
+        <item>noventa</item>
+    </string-array>
+
+    <string-array name="number_to_word_hundreds">
+        <item name="empty" />
+        <item>cento</item>
+        <item>duzentos</item>
+        <item>trezentos</item>
+        <item>quatrocentos</item>
+        <item>quinhentos</item>
+        <item>seiscentos</item>
+        <item>setecentos</item>
+        <item>oitocentos</item>
+        <item>novecentos</item>
+    </string-array>
+
+    <string-array name="number_to_word_thousands">
+        <item name="empty" />
+        <item>mil</item>
+        <item>milhão</item>
+        <item>bilhão</item>
+        <item>trilhão</item>
+    </string-array>
+</resources>
