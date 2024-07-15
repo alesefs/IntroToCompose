@@ -3,10 +3,12 @@ package com.example.introtocompose
 fun main() {
     val icons = "itemTesteTomposeString" //ok!
     val illustra = "item_teste_compose_string" //ok!
+    val illustra2 = "Item_teste_compose_string" //ok!
 
     println(illustra.snakeToLowerCamelCase())
     println(illustra.snakeToUpperCamelCase())
     println(icons.camelToSnakeCase())
+    println(illustra.camelToLowerCamelCase())
 }
 
 val camelRegex = "(?<=[a-zA-Z])[A-Z]".toRegex()
@@ -29,4 +31,9 @@ fun String.snakeToLowerCamelCase(): String {
 fun String.snakeToUpperCamelCase(): String {
     return this.snakeToLowerCamelCase()
         .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+}
+
+fun String.camelToLowerCamelCase(): String {
+    return this.snakeToLowerCamelCase()
+        .replaceFirstChar { if (it.isUpperCase()) it.lowercase() else it.toString() }
 }
