@@ -182,7 +182,7 @@ fun CustomCardItemList.Central.texts(
     modifier: Modifier = Modifier,
 ) : CustomCardItemList.Central {
 
-    Column {
+    Column(modifier = modifier) {
         Text(text = "Text 1")
         Text(text = "Text 2")
         Text(text = "Text 3")
