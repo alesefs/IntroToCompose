@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.automirrored.rounded.Send
@@ -30,6 +31,7 @@ fun CustomCardItemList(
     contentSupportVisual: @Composable (() -> CustomCardItemList.SupportVisual)? = null,
     contentCentral: @Composable (() -> CustomCardItemList.Central),
     contentAction: @Composable (() -> CustomCardItemList.Action)? = null,
+    subContent: @Composable (() -> Unit)? = null,
     action: (() -> Unit)? = null
 ) {
     /*Box(modifier = modifier) {
@@ -71,7 +73,7 @@ fun CustomCardItemList(
     }*/
 
     Box(modifier = modifier) {
-        ConstraintLayout(
+        /*ConstraintLayout(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()
@@ -82,7 +84,7 @@ fun CustomCardItemList(
                     }
                 }
         ) {
-            val (contentSupportVisualRef, contentCentralRef, contentActionRef) = createRefs()
+            val (contentSupportVisualRef, contentCentralRef, contentActionRef, contetnSubRef) = createRefs()
 
             if (contentSupportVisual != null) {
                 Box(
@@ -130,7 +132,109 @@ fun CustomCardItemList(
                 }
             }
 
+            Box(
+                Modifier
+                    .background(Color.Red)
+                    .constrainAs(contetnSubRef) {
+                        top.linkTo(contentCentralRef.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        width = Dimension.fillToConstraints
+                    }
+            ) {
+                contentCentral.invoke()
+            }
+
+        }*/
+
+        Column {
+            CustomListMainContent(alignSupportVisual, contentSupportVisual, contentCentral, contentAction)
+
+
         }
+    }
+}
+
+@Composable
+fun CustomListMainContent(
+    alignSupportVisual: AlignSupportVisual = AlignSupportVisual.Top,
+    contentSupportVisual: @Composable (() -> CustomCardItemList.SupportVisual)? = null,
+    contentCentral: @Composable (() -> CustomCardItemList.Central),
+    contentAction: @Composable (() -> CustomCardItemList.Action)? = null,
+    action: (() -> Unit)? = null
+) {
+    ConstraintLayout(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .background(Color.Blue)
+            .thenIf(action != null) {
+                clickable {
+                    action?.invoke()
+                }
+            }
+    ) {
+        val (contentSupportVisualRef, contentCentralRef, contentActionRef, contentSubRef) = createRefs()
+
+        if (contentSupportVisual != null) {
+            Box(
+                Modifier
+                    .background(Color.Green)
+                    .constrainAs(contentSupportVisualRef) {
+                        top.linkTo(parent.top)
+                        if (alignSupportVisual == AlignSupportVisual.Center) bottom.linkTo(
+                            parent.bottom
+                        )
+                        start.linkTo(parent.start)
+                    }
+                    .padding(end = 16.dp)
+            ) {
+                contentSupportVisual.invoke()
+            }
+        }
+
+        Box(
+            Modifier
+                .background(Color.Green)
+                .constrainAs(contentCentralRef) {
+                    top.linkTo(parent.top)
+                    start.linkTo(contentSupportVisualRef.end)
+                    end.linkTo(contentActionRef.start)
+                    width = Dimension.fillToConstraints
+                }
+        ) {
+            contentCentral.invoke()
+        }
+
+        if (contentAction != null) {
+            Box(
+                Modifier
+                    .background(Color.Green)
+                    .constrainAs(contentActionRef) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(contentCentralRef.end)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(start = 16.dp)
+            ) {
+                contentAction.invoke()
+            }
+        }
+
+        /*Box(
+            Modifier
+                .background(Color.Red)
+                .constrainAs(contentSubRef) {
+                    top.linkTo(contentCentralRef.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    width = Dimension.fillToConstraints
+                }
+        ) {
+            contentCentral.invoke()
+        }*/
     }
 }
 
