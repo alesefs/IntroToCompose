@@ -19,6 +19,7 @@ activity = "1.9.0"
 coil-compose = "2.6.0"
 coil-svg = "2.6.0"
 animationGraphicsAndroid = "1.6.8"
+viewModel = "2.8.7"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -45,6 +46,8 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
 coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coil-svg" }
 androidx-animation-graphics-android = { group = "androidx.compose.animation", name = "animation-graphics-android", version.ref = "animationGraphicsAndroid" }
+viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "viewModel"}
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
