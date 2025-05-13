@@ -13,13 +13,13 @@
         android:theme="@style/Theme.IntroToCompose"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity2"
+            android:name=".CustomViewActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".CustomViewActivity"
+            android:name=".MainActivity2"
             android:exported="true"
             android:theme="@style/Theme.IntroToCompose">
             <intent-filter>

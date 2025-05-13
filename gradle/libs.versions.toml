@@ -20,6 +20,7 @@ coil-compose = "2.6.0"
 coil-svg = "2.6.0"
 animationGraphicsAndroid = "1.6.8"
 viewModel = "2.8.7"
+systemuicontroller = "0.36.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -47,6 +48,7 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose
 coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coil-svg" }
 androidx-animation-graphics-android = { group = "androidx.compose.animation", name = "animation-graphics-android", version.ref = "animationGraphicsAndroid" }
 viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "viewModel"}
+system-ui-controller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "systemuicontroller"}
 
 
 [plugins]

@@ -149,8 +149,6 @@ fun CustomCardItemList(
 
         Column {
             CustomListMainContent(alignSupportVisual, contentSupportVisual, contentCentral, contentAction)
-
-
         }
     }
 }
@@ -165,7 +163,7 @@ fun CustomListMainContent(
 ) {
     ConstraintLayout(
         modifier = Modifier
-            .padding(16.dp)
+//            .padding(16.dp)
             .fillMaxWidth()
             .background(Color.Blue)
             .thenIf(action != null) {

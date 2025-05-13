@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
@@ -52,7 +51,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             IntroToComposeTheme {
-                setStatusBarColor(color = Color.Green)
+                SetStatusBarColor(color = Color.Green)
                 // A surface container using the 'background' color from the theme
                 /*Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -187,7 +186,7 @@ fun GreetingPreview() {
 }
 
 @Composable
-fun setStatusBarColor(color: Color) {
+fun SetStatusBarColor(color: Color) {
     val view = LocalView.current
 
     if (!view.isInEditMode) {

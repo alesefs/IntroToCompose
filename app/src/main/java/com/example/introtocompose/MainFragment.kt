@@ -26,7 +26,7 @@ class MainFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 IntroToComposeTheme {
-                    setStatusBarColor(color = Color.Green)
+                    SetStatusBarColor(color = Color.Green)
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.primary

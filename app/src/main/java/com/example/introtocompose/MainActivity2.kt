@@ -2,9 +2,11 @@ package com.example.introtocompose
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
@@ -13,17 +15,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.introtocompose.ui.theme.IntroToComposeTheme
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 
 data class TestDataClass(
@@ -43,14 +45,28 @@ class TestViewModel: ViewModel(){
 
 class MainActivity2 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.light(
+                scrim = android.graphics.Color.TRANSPARENT,
+                darkScrim = android.graphics.Color.TRANSPARENT
+            )
+        )
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             IntroToComposeTheme {
-                setStatusBarColor(color = Color.Green)
+//                SetStatusBarColor(color = Color.Red)
+
+                /*val systemController = rememberSystemUiController()
+                val darkTheme = isSystemInDarkTheme()
+                SideEffect {
+                    systemController.setSystemBarsColor(
+                        color = if (darkTheme) Color.LightGray else Color.Cyan
+                    )
+                }*/
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.secondary
                 ) {
                     Greeting(viewModel = viewModel())
                 }
