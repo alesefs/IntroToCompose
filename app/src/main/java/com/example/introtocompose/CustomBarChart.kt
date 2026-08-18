@@ -22,6 +22,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
@@ -428,7 +429,7 @@ fun BarChart(
                         val isSelected =
                             selectedIndex == index
 
-                        drawRoundRect(
+                        /*drawRoundRect(
                             color =
                                 if (isSelected) {
                                     Color.Cyan
@@ -453,7 +454,53 @@ fun BarChart(
                                     4.dp.toPx(),
                                     4.dp.toPx()
                                 )
+                        )*/
+
+                        // Barra
+                        drawRoundRect(
+                            color = if (isSelected) {
+                                Color.Cyan
+                            } else {
+                                Color.Cyan.copy(alpha = 0.75f)
+                            },
+                            topLeft = Offset(
+                                x,
+                                barTop
+                            ),
+                            size = Size(
+                                barWidthPx,
+                                barHeight
+                            ),
+                            cornerRadius = CornerRadius(
+                                4.dp.toPx(),
+                                4.dp.toPx()
+                            )
                         )
+
+                        // Borda da barra selecionada
+                        if (isSelected) {
+
+                            val borderWidth = 2.dp.toPx()
+
+                            drawRoundRect(
+                                color = Color.Blue,
+                                topLeft = Offset(
+                                    x - borderWidth / 2,
+                                    barTop - borderWidth / 2
+                                ),
+                                size = Size(
+                                    barWidthPx + borderWidth,
+                                    barHeight + borderWidth
+                                ),
+                                cornerRadius = CornerRadius(
+                                    4.dp.toPx(),
+                                    4.dp.toPx()
+                                ),
+                                style = Stroke(
+                                    width = borderWidth
+                                )
+                            )
+                        }
 
                         // -------------------------------------------------
                         // VALOR DA BARRA
